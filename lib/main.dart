@@ -2,7 +2,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:split_view/split_view.dart';
-import 'package:tommyspec/then.dart';
+import 'package:tommyspec/and.dart';
+import 'package:tommyspec/expand.dart';
 
 void main() {
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Scaffold(body: MyApp())));
@@ -31,12 +32,16 @@ class _MyAppState extends State<MyApp> {
         })
       ]))),
       TextField(controller: statusCtrl),
-      Expanded(child: Container(color: Colors.grey, child: SplitView(viewMode: SplitViewMode.Horizontal, children: [
+      TrixExpandPanel(headerWidget: Text("Output"), child: Container(height: 200, color: Colors.grey, child: SplitView(viewMode: SplitViewMode.Horizontal, children: [
         TextFormField(controller: stdoutCtrl, maxLines: 4096),
         TextFormField(controller: stderrCtrl, maxLines: 4096),
       ]))),
-      ThenWidget(stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl),
-      ThenWidget(stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl),
+      Expanded(child: ListView.builder(
+        itemCount: 5,
+        itemBuilder: (context, i) {
+          return AndWidget(stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl);
+        }
+      ))
     ]);
   }
 

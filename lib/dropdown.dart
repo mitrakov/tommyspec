@@ -17,10 +17,10 @@ class TrixDropdown<T> extends StatefulWidget {
   });
 
   @override
-  TrixDropdownState<T> createState() => TrixDropdownState<T>();
+  State<TrixDropdown<T>> createState() => _TrixDropdownState<T>();
 }
 
-class TrixDropdownState<T> extends State<TrixDropdown<T>> {
+class _TrixDropdownState<T> extends State<TrixDropdown<T>> {
   late T? value;
 
   @override
