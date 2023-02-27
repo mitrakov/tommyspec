@@ -1,9 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:split_view/split_view.dart';
-import 'package:tommyspec/and.dart';
 import 'package:tommyspec/expand.dart';
+import 'package:tommyspec/whenthen.dart';
 
 void main() {
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Scaffold(body: MyApp())));
@@ -22,9 +21,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(mainAxisSize: MainAxisSize.min, children: [
       SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
-        SizedBox(width: 300, child: TextFormField(controller: commandCtrl, decoration: InputDecoration(hintText: "Hey"))),
+        SizedBox(width: 300, child: TextField(controller: commandCtrl, decoration: InputDecoration(hintText: "Hey"))),
         OutlinedButton(child: Text("Run"), onPressed: () {
           setState(() {
             _runProcess(commandCtrl.text, []);
@@ -32,14 +31,10 @@ class _MyAppState extends State<MyApp> {
         })
       ]))),
       TextField(controller: statusCtrl),
-      TrixExpandPanel(headerWidget: Text("Output"), child: Container(height: 200, color: Colors.grey, child: SplitView(viewMode: SplitViewMode.Horizontal, children: [
-        TextFormField(controller: stdoutCtrl, maxLines: 4096),
-        TextFormField(controller: stderrCtrl, maxLines: 4096),
-      ]))),
       Expanded(child: ListView.builder(
-        itemCount: 5,
+        itemCount: 2,
         itemBuilder: (context, i) {
-          return AndWidget(stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl);
+          return TrixExpandPanel(headerWidget: Text("WHen"), child: WhenThenWidget(stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl));
         }
       ))
     ]);

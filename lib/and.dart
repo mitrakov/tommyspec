@@ -30,17 +30,17 @@ class _AndWidgetState extends State<AndWidget> {
       child: SizedBox(
         height: 145,
         child: Row(children: [
-          Expanded(child: TextFormField(controller: actualCtrl, maxLines: 1024)),
-          Expanded(child: Column(children: [
-            Row(children: [
+          Expanded(child: TextField(controller: actualCtrl, maxLines: 1024)),
+          Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Row(mainAxisSize: MainAxisSize.min, children: [
               Expanded(child: TrixDropdown(hintText: "Process", options: const ["Stdout", "Stderr"], getLabel: (s) => s, onChanged: (s) => processCtrl.text = s)),
               Expanded(child: TrixDropdown(hintText: "As", options: const ["Json", "XML"], getLabel: (s) => s, onChanged: (s) => asCtrl.text = s))
             ]),
-            TextFormField(controller: transformCtrl),
-            Row(children: [
+            TextField(controller: transformCtrl),
+            Row(mainAxisSize: MainAxisSize.min, children: [
               const Text("Should be"),
               Expanded(child: TrixDropdown(hintText: "Op", options: const ["=", ">", "<", "≥", "≤"], getLabel: (s) => s, onChanged: (s) => opCtrl.text = s)),
-              Expanded(child: TextFormField(controller: expectedCtrl)),
+              Expanded(child: TextField(controller: expectedCtrl)),
               _isOk() ? const Icon(Icons.done_outline, color: Colors.green) : const Icon(Icons.do_not_disturb, color: Colors.red),
             ])
           ]))
