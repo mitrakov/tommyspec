@@ -5,7 +5,7 @@ import 'package:json_path/json_path.dart';
 import 'package:tommyspec/common/dropdown.dart';
 import 'package:tommyspec/common/expand.dart';
 
-class AndWidget extends StatefulWidget {
+class AndWidget extends StatefulWidget { // should be Stateful (?)
   final TextEditingController stdoutCtrl;
   final TextEditingController stderrCtrl;
   const AndWidget({super.key, required this.stdoutCtrl, required this.stderrCtrl});

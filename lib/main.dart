@@ -1,10 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:tommyspec/common/expand.dart';
-import 'package:tommyspec/given.dart';
-import 'package:tommyspec/when.dart';
-import 'package:tommyspec/then.dart';
+import 'package:tommyspec/common/icontextbutton.dart';
+import 'package:tommyspec/scenario.dart';
 
 void main() {
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Scaffold(body: MyApp())));
@@ -20,6 +18,7 @@ class _MyAppState extends State<MyApp> {
   final statusCtrl = TextEditingController();
   final stdoutCtrl = TextEditingController();
   final stderrCtrl = TextEditingController();
+  int itemCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +32,21 @@ class _MyAppState extends State<MyApp> {
         })
       ]))),
       TextField(controller: statusCtrl),
-      GivenWidget(),
-      WhenWidget(),
       Expanded(child: ListView.builder(
-        itemCount: 2,
+        itemCount: itemCount + 1,
         itemBuilder: (context, i) {
-          return TrixExpandPanel(headerWidget: Text("THEN"), child: ThenWidget(stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl));
+          return i == itemCount
+            ? TrixIconTextButton(icon: Icon(Icons.add_circle_outline), label: "Scenario", onTap: _addScenario)
+            : ScenarioWidget(stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl,);
         }
       ))
     ]);
+  }
+
+  void _addScenario() {
+    setState(() {
+      itemCount++;
+    });
   }
 
   void _runProcess(String command, List<String> arguments) {
