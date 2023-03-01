@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:split_view/split_view.dart';
 import 'package:tommyspec/and.dart';
-import 'package:tommyspec/expand.dart';
+import 'package:tommyspec/common/expand.dart';
 
-class WhenThenWidget extends StatefulWidget {
+class ThenWidget extends StatefulWidget {
   final TextEditingController stdoutCtrl;
   final TextEditingController stderrCtrl;
 
-  const WhenThenWidget({super.key, required this.stdoutCtrl, required this.stderrCtrl});
+  const ThenWidget({super.key, required this.stdoutCtrl, required this.stderrCtrl});
 
   @override
-  State<WhenThenWidget> createState() => _WhenThenWidgetState();
+  State<ThenWidget> createState() => _ThenWidgetState();
 }
 
-class _WhenThenWidgetState extends State<WhenThenWidget> {
+class _ThenWidgetState extends State<ThenWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(height: 400, child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-      Row(mainAxisSize: MainAxisSize.min, children: [
-        Text("When"),
-        SizedBox(width: 200, child: TextField(),),
-      ],),
       Row(mainAxisSize: MainAxisSize.min, children: [
         Text("Then"),
         Text("Status code"),
@@ -34,10 +30,10 @@ class _WhenThenWidgetState extends State<WhenThenWidget> {
         TextField(controller: widget.stderrCtrl, maxLines: 4096),
       ]))),
       Expanded(child: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, i) {
-            return AndWidget(stdoutCtrl: widget.stdoutCtrl, stderrCtrl: widget.stderrCtrl);
-          }
+        itemCount: 5,
+        itemBuilder: (context, i) {
+          return AndWidget(stdoutCtrl: widget.stdoutCtrl, stderrCtrl: widget.stderrCtrl);
+        }
       ))
     ]),);
   }

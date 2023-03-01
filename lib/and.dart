@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:json_path/json_path.dart';
-import 'package:tommyspec/dropdown.dart';
-import 'package:tommyspec/expand.dart';
+import 'package:tommyspec/common/dropdown.dart';
+import 'package:tommyspec/common/expand.dart';
 
 class AndWidget extends StatefulWidget {
   final TextEditingController stdoutCtrl;
