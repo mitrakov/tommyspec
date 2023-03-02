@@ -12,7 +12,6 @@ class TrixIconTextButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           icon,

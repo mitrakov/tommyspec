@@ -36,7 +36,9 @@ class _MyAppState extends State<MyApp> {
         itemCount: itemCount + 1,
         itemBuilder: (context, i) {
           return i == itemCount
-            ? TrixIconTextButton(icon: Icon(Icons.add_circle_outline), label: "Scenario", onTap: _addScenario)
+            ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                TrixIconTextButton(icon: Icon(Icons.add_circle_outline), label: "Scenario", onTap: _addScenario)
+              ],)
             : ScenarioWidget(stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl,);
         }
       ))
