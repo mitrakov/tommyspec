@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:json_path/json_path.dart';
 import 'package:tommyspec/common/dropdown.dart';
 import 'package:tommyspec/common/expand.dart';
+import 'package:xpath_parse/xpath_selector.dart'; // update to null-safety version
 
 class AndWidget extends StatefulWidget {
   final TextEditingController stdoutCtrl;
@@ -64,6 +65,17 @@ class _AndWidgetState extends State<AndWidget> {
       final jmes = JsonPath("\$.${transformCtrl.text}");
       final json = jsonDecode(s);
       final result = jmes.read(json).map((e) => e.value).first;
+      actualCtrl.text = result.toString();
+    } catch(e) {
+      actualCtrl.text = e.toString();
+    }
+  }
+
+  void _processXml() {
+    try {
+      final s = stdoutOrErr ? widget.stdoutCtrl.text.trim() : widget.stderrCtrl.text.trim();
+      final node = XPath.source(s).query(transformCtrl.text);
+      final result = node.list().first;
       actualCtrl.text = result.toString();
     } catch(e) {
       actualCtrl.text = e.toString();

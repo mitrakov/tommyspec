@@ -1,3 +1,4 @@
+# run with "--no-sound-null-safety"
 name: tommyspec
 description: TommySpec project
 
@@ -11,6 +12,7 @@ dependencies:
     sdk: flutter
   split_view: ^3.2.1
   json_path: ^0.4.2
+  xpath_parse: ^1.0.2   # update to null-safety version
 
   cupertino_icons: ^1.0.2
 
