@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
         SizedBox(width: 300, child: TextField(controller: commandCtrl, decoration: InputDecoration(hintText: "Hey"))),
         OutlinedButton(child: Text("Run"), onPressed: () {
           setState(() { // TODO need this?
-            runCtrl.run(commandCtrl.text);
+            runCtrl.run(commandCtrl.text.trim());
           });
         })
       ]))),
