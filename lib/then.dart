@@ -18,19 +18,17 @@ class ThenWidget extends StatefulWidget {
 class _ThenWidgetState extends State<ThenWidget> {
   final statusExpectedCtrl = TextEditingController();
   int andItemCount = 0;
-  bool isStatusOk = false;
 
   @override
   Widget build(BuildContext context) {
-    processStatusCode();
-    return SizedBox(height: 330+50.0*(andItemCount), child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+    return SizedBox(height: 430+50.0*(andItemCount), child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
       Row(mainAxisSize: MainAxisSize.min, children: [
         Text("Then"),
         Text("Status code"),
         Expanded(child: TextField(controller: widget.statusCtrl, readOnly: true,)),
         Text("should be"),
         Expanded(child: TextField(controller: statusExpectedCtrl,)),
-        isStatusOk
+        _isStatusOk()
           ? Icon(Icons.done_outline, color: Colors.green)
           : Icon(Icons.do_not_disturb_alt_rounded, color: Colors.red)
       ],),
@@ -49,10 +47,8 @@ class _ThenWidgetState extends State<ThenWidget> {
     ]),);
   }
 
-  void processStatusCode() {
-    setState(() {
-      isStatusOk = widget.statusCtrl.text == statusExpectedCtrl.text.trim();
-    });
+  bool _isStatusOk() {
+    return widget.statusCtrl.text == statusExpectedCtrl.text.trim();
   }
 
   void _addAndItem() {

@@ -62,6 +62,6 @@ class _AndWidgetState extends State<AndWidget> {
   }
 
   bool _isOk() {
-    return actualCtrl.text == expectedCtrl.text;
+    return expectedCtrl.text.isNotEmpty && actualCtrl.text.trim() == expectedCtrl.text.trim();
   }
 }
