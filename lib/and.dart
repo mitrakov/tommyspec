@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:json_path/json_path.dart';
 import 'package:tommyspec/common/dropdown.dart';
 import 'package:tommyspec/common/expand.dart';
+import 'package:tommyspec/utils/txt_processor.dart';
 import 'package:xpath_parse/xpath_selector.dart'; // update to null-safety version
 
 class AndWidget extends StatefulWidget {
@@ -34,7 +35,7 @@ class _AndWidgetState extends State<AndWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _processJson();
+    _processText();
     return TrixExpandPanel(
       headerWidget: Text("AND"),
       child: SizedBox(
@@ -62,9 +63,8 @@ class _AndWidgetState extends State<AndWidget> {
   void _processJson() {
     try {
       final s = stdoutOrErr ? widget.stdoutCtrl.text.trim() : widget.stderrCtrl.text.trim();
-      final jmes = JsonPath("\$.${transformCtrl.text}");
-      final json = jsonDecode(s);
-      final result = jmes.read(json).map((e) => e.value).first;
+      final jmes = JsonPath("\$.${transformCtrl.text.trim()}");
+      final result = jmes.read(jsonDecode(s)).map((e) => e.value).first;
       actualCtrl.text = result.toString();
     } catch(e) {
       actualCtrl.text = e.toString();
@@ -74,9 +74,20 @@ class _AndWidgetState extends State<AndWidget> {
   void _processXml() {
     try {
       final s = stdoutOrErr ? widget.stdoutCtrl.text.trim() : widget.stderrCtrl.text.trim();
-      final node = XPath.source(s).query(transformCtrl.text);
+      final node = XPath.source(s).query(transformCtrl.text.trim());
       final result = node.list().first;
       actualCtrl.text = result.toString();
+    } catch(e) {
+      actualCtrl.text = e.toString();
+    }
+  }
+
+  void _processText() {
+    try {
+      final s = stdoutOrErr ? widget.stdoutCtrl.text.trim() : widget.stderrCtrl.text.trim();
+      final cmd = transformCtrl.text.trim();
+      final result = TextProcessor.process(cmd, s);
+      actualCtrl.text = result;
     } catch(e) {
       actualCtrl.text = e.toString();
     }

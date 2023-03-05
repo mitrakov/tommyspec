@@ -48,7 +48,7 @@ class _ThenWidgetState extends State<ThenWidget> {
   }
 
   bool _isStatusOk() {
-    return widget.statusCtrl.text == statusExpectedCtrl.text.trim();
+    return widget.statusCtrl.text.isNotEmpty && widget.statusCtrl.text == statusExpectedCtrl.text.trim();
   }
 
   void _addAndItem() {
