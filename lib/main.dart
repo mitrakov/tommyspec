@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tommyspec/common/icontextbutton.dart';
 import 'package:tommyspec/scenario.dart';
 import 'package:tommyspec/utils/fnctrl.dart';
@@ -20,26 +21,37 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
-        SizedBox(width: 300, child: TextField(controller: commandCtrl, decoration: InputDecoration(hintText: "Hey"))),
-        OutlinedButton(child: Text("Run"), onPressed: () {
-          setState(() { // TODO need this?
-            runCtrl.run(commandCtrl.text.trim());
-          });
-        })
-      ]))),
-      Expanded(child: ListView.builder(
-        itemCount: itemCount + 1,
-        itemBuilder: (context, i) {
-          return i == itemCount
-            ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    return Shortcuts(
+      shortcuts: {
+        SingleActivator(LogicalKeyboardKey.enter): RunIntent()
+      },
+    child: Actions(
+      actions: {
+        RunIntent: CallbackAction(onInvoke: (_) => _run())
+      },
+      child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+        SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
+          SizedBox(width: 300, child: TextField(controller: commandCtrl, decoration: InputDecoration(hintText: "Hey"))),
+          OutlinedButton(child: Text("Run"), onPressed: _run)
+        ]))),
+        Expanded(child: ListView.builder(
+            itemCount: itemCount + 1,
+            itemBuilder: (context, i) {
+              return i == itemCount
+                  ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 TrixIconTextButton(icon: Icon(Icons.add_circle_outline), label: "Scenario", onTap: _addScenario)
               ],)
-            : ScenarioWidget(runController: runCtrl,);
-        }
-      ))
-    ]);
+                  : ScenarioWidget(runController: runCtrl,);
+            }
+        ))
+      ])
+    ));
+  }
+
+  void _run() {
+    setState(() { // we need this to update children
+      runCtrl.run(commandCtrl.text.trim());
+    });
   }
 
   void _addScenario() {
@@ -48,3 +60,5 @@ class _MyAppState extends State<MyApp> {
     });
   }
 }
+
+class RunIntent extends Intent {}

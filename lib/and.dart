@@ -19,9 +19,9 @@ class AndWidget extends StatefulWidget {
 class _AndWidgetState extends State<AndWidget> {
   static const stdout = "Stdout";
   static const stderr = "Stderr";
+  static const csvText = "CSV/Text";
   static const json = "Json";
   static const xml = "XML";
-  static const csvText = "CSV/Text";
   static const regex = "Regex";
   static const eq = "=";
   static const gt = ">";
@@ -35,7 +35,7 @@ class _AndWidgetState extends State<AndWidget> {
 
   bool stdoutOrErr = true;
   String op = eq;
-  String as = json;
+  String as = csvText;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class _AndWidgetState extends State<AndWidget> {
           Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
             Row(mainAxisSize: MainAxisSize.min, children: [
               Expanded(child: TrixDropdown(hintText: "Process", options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => stdoutOrErr = s==stdout)),
-              Expanded(child: TrixDropdown(hintText: "As", options: const [json, xml, csvText, regex], getLabel: (s) => s, onChanged: (s) => as = s))
+              Expanded(child: TrixDropdown(hintText: "As", options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => as = s))
             ]),
             TextField(controller: queryCtrl),
             Row(mainAxisSize: MainAxisSize.min, children: [
@@ -70,14 +70,14 @@ class _AndWidgetState extends State<AndWidget> {
     if (s.isEmpty || query.isEmpty) return;
     try {
       switch (as) {
+        case csvText:
+          actualCtrl.text = TextProcessor.process(query, s);
+          break;
         case json:
           actualCtrl.text = JsonPath("\$.$query").read(jsonDecode(s)).map((e) => e.value).first.toString();
           break;
         case xml:
           actualCtrl.text = XPath.source(s).query(query).list().first;
-          break;
-        case csvText:
-          actualCtrl.text = TextProcessor.process(query, s);
           break;
         case regex:
           actualCtrl.text = RegExp(query).firstMatch(s)?.group(0) ?? "";
