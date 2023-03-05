@@ -19,23 +19,27 @@ class AndWidget extends StatefulWidget {
 class _AndWidgetState extends State<AndWidget> {
   static const stdout = "Stdout";
   static const stderr = "Stderr";
+  static const json = "Json";
+  static const xml = "XML";
+  static const csvText = "CSV/Text";
+  static const regex = "Regex";
   static const eq = "=";
   static const gt = ">";
   static const lt = "<";
   static const ge = "≥";
   static const le = "≤";
 
+  final queryCtrl = TextEditingController();
   final actualCtrl = TextEditingController();
-  final asCtrl = TextEditingController();
-  final transformCtrl = TextEditingController();
   final expectedCtrl = TextEditingController();
 
   bool stdoutOrErr = true;
   String op = eq;
+  String as = json;
 
   @override
   Widget build(BuildContext context) {
-    _processText();
+    _process();
     return TrixExpandPanel(
       headerWidget: Text("AND"),
       child: SizedBox(
@@ -45,9 +49,9 @@ class _AndWidgetState extends State<AndWidget> {
           Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
             Row(mainAxisSize: MainAxisSize.min, children: [
               Expanded(child: TrixDropdown(hintText: "Process", options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => stdoutOrErr = s==stdout)),
-              Expanded(child: TrixDropdown(hintText: "As", options: const ["Json", "XML"], getLabel: (s) => s, onChanged: (s) => asCtrl.text = s))
+              Expanded(child: TrixDropdown(hintText: "As", options: const [json, xml, csvText, regex], getLabel: (s) => s, onChanged: (s) => as = s))
             ]),
-            TextField(controller: transformCtrl),
+            TextField(controller: queryCtrl),
             Row(mainAxisSize: MainAxisSize.min, children: [
               const Text("Should be"),
               Expanded(child: TrixDropdown(hintText: "Op", options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => op = s)),
@@ -60,34 +64,25 @@ class _AndWidgetState extends State<AndWidget> {
     );
   }
 
-  void _processJson() {
+  void _process() {
+    final s = stdoutOrErr ? widget.stdoutCtrl.text.trim() : widget.stderrCtrl.text.trim();
+    final query = queryCtrl.text.trim();
+    if (s.isEmpty || query.isEmpty) return;
     try {
-      final s = stdoutOrErr ? widget.stdoutCtrl.text.trim() : widget.stderrCtrl.text.trim();
-      final jmes = JsonPath("\$.${transformCtrl.text.trim()}");
-      final result = jmes.read(jsonDecode(s)).map((e) => e.value).first;
-      actualCtrl.text = result.toString();
-    } catch(e) {
-      actualCtrl.text = e.toString();
-    }
-  }
-
-  void _processXml() {
-    try {
-      final s = stdoutOrErr ? widget.stdoutCtrl.text.trim() : widget.stderrCtrl.text.trim();
-      final node = XPath.source(s).query(transformCtrl.text.trim());
-      final result = node.list().first;
-      actualCtrl.text = result.toString();
-    } catch(e) {
-      actualCtrl.text = e.toString();
-    }
-  }
-
-  void _processText() {
-    try {
-      final s = stdoutOrErr ? widget.stdoutCtrl.text.trim() : widget.stderrCtrl.text.trim();
-      final cmd = transformCtrl.text.trim();
-      final result = TextProcessor.process(cmd, s);
-      actualCtrl.text = result;
+      switch (as) {
+        case json:
+          actualCtrl.text = JsonPath("\$.$query").read(jsonDecode(s)).map((e) => e.value).first.toString();
+          break;
+        case xml:
+          actualCtrl.text = XPath.source(s).query(query).list().first;
+          break;
+        case csvText:
+          actualCtrl.text = TextProcessor.process(query, s);
+          break;
+        case regex:
+          actualCtrl.text = RegExp(query).firstMatch(s)?.group(0) ?? "";
+          break;
+      }
     } catch(e) {
       actualCtrl.text = e.toString();
     }

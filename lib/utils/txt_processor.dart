@@ -8,8 +8,8 @@ class TextProcessor {
   static final _separatorRegex = RegExp(".*sep (.).*");
   static final error = Exception("""Invalid command. Try "text", "csv 1 1", "csv 1 1 sep ;", "row 1", "row 1 word 1", "row 1 words 1-3", "row 1 word 1 sep |".""");
 
-  static String process(String cmd, String textBlock) {
-    final s = textBlock.replaceAll('\r\n', '\n');
+  static String process(String cmd, String input) {
+    final s = input.replaceAll('\r\n', '\n');
     if (cmd.contains("text")) return s;
 
     // parsing cmd
