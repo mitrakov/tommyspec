@@ -10,7 +10,7 @@ class TextProcessor {
 
   static String process(String cmd, String input) {
     final s = input.replaceAll('\r\n', '\n');
-    if (cmd.contains("text")) return s;
+    if (cmd == "text") return s;
 
     // parsing cmd
     final row = _rowRegex.firstMatch(cmd)?.group(1);
