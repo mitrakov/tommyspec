@@ -1,12 +1,12 @@
 import 'package:csv/csv.dart';
 
 class TextProcessor {
-  static final _csvRegex = RegExp(".*csv (\\d+) (\\d+).*");
-  static final _rowRegex = RegExp(".*row (\\d+).*");
-  static final _wordRegex = RegExp(".*word (\\d+).*");
-  static final _wordsRegex = RegExp(".*words (\\d+)-(\\d+).*");
-  static final _separatorRegex = RegExp(".*sep (.).*");
-  static final error = Exception("""Invalid command. Try "text", "csv 1 1", "csv 1 1 sep ;", "row 1", "row 1 word 1", "row 1 words 1-3", "row 1 word 1 sep |".""");
+  static final _csvRegex = RegExp("csv (\\d+) (\\d+)");
+  static final _rowRegex = RegExp("row (\\d+)");
+  static final _wordRegex = RegExp("word (\\d+)");
+  static final _wordsRegex = RegExp("words (\\d+)-(\\d+)");
+  static final _separatorRegex = RegExp("sep (.)");
+  static final _error = Exception("""Invalid command. Try "text", "csv 1 1", "csv 1 1 sep ;", "row 1", "row 1 word 1", "row 1 words 1-3", "row 1 word 1 sep |".""");
 
   static String process(String cmd, String input) {
     final s = input.replaceAll('\r\n', '\n');
@@ -25,7 +25,7 @@ class TextProcessor {
     final bool rowCmdExists = row != null;
     final bool wordCmdExists = word != null || wordsTo != null;
     final bool csvCmdExists = csvRow != null && csvCol != null;
-    if (!rowCmdExists && !wordCmdExists && !csvCmdExists) throw error;
+    if (!rowCmdExists && !wordCmdExists && !csvCmdExists) throw _error;
 
     // parsing rows and words
     int rowNumber = 0;
