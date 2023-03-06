@@ -4,7 +4,7 @@ import 'package:tommyspec/common/roundbox.dart';
 class WhenWidget extends StatelessWidget {
   final TextEditingController argsCtrl;
 
-  const WhenWidget({super.key, required this.argsCtrl});
+  const WhenWidget(this.argsCtrl);
 
   @override
   Widget build(BuildContext context) {

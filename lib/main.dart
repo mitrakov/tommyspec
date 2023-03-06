@@ -8,7 +8,7 @@ import 'package:tommyspec/scenario.dart';
 import 'package:tommyspec/utils/fnctrl.dart';
 
 void main() {
-  final model = TommyModel();
+  final model = TestModel();
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Scaffold(body: ScopedModel(model: model, child: MyApp()))));
 }
 
@@ -19,11 +19,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final runCtrl = FunctionController<String>();
-  int itemCount = 0;
+  int itemCount = hey;
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<TommyModel>(
+    return ScopedModelDescendant<TestModel>(
         builder: (context, _, model) {
         return Shortcuts(
           shortcuts: {
@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
                         ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       TrixIconTextButton(icon: Icon(Icons.add_circle_outline), label: "Scenario", onTap: _addScenario)
                     ],)
-                        : ScenarioWidget(runController: runCtrl,);
+                        : ScenarioWidget(i, runCtrl);
                   }
               ))
             ])

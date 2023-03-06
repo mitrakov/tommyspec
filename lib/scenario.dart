@@ -10,8 +10,10 @@ import 'package:tommyspec/utils/fnctrl.dart';
 import 'package:tommyspec/when.dart';
 
 class ScenarioWidget extends StatefulWidget {
+  final int idx;
   final FunctionController<String> runController;
-  const ScenarioWidget({super.key, required this.runController});
+
+  const ScenarioWidget(this.idx, this.runController);
 
   @override
   State<ScenarioWidget> createState() => _ScenarioWidgetState();
@@ -35,8 +37,8 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(elevation: 5, child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-      showGiven ? GivenWidget() : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
-      showWhen ? WhenWidget(argsCtrl: cmdArgsCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
+      showGiven ? GivenWidget(widget.idx) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
+      showWhen ? WhenWidget(cmdArgsCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
       showThen ? ThenWidget(statusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
     ],),)
     ;
@@ -61,10 +63,10 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   }
 
   void runProcess(String command) {
-    final model = ScopedModel.of<TommyModel>(context);
+    final model = ScopedModel.of<TestModel>(context);
     if (command.isNotEmpty) try {
       final args = cmdArgsCtrl.text.split(' ').where((a) => a.isNotEmpty).toList();
-      final proc = Process.runSync(command, args, workingDirectory: model.pwd, environment: model.env);
+      final proc = Process.runSync(command, args, workingDirectory: model.getPwd(widget.idx), environment: model.getEnv(widget.idx));
       statusCtrl.text = proc.exitCode.toString();
       stdoutCtrl.text = proc.stdout;
       stderrCtrl.text = proc.stderr;
