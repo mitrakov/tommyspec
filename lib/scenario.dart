@@ -16,10 +16,12 @@ class ScenarioWidget extends StatefulWidget {
 }
 
 class _ScenarioWidgetState extends State<ScenarioWidget> {
+  final cmdArgsCtrl = TextEditingController();
+  final pwdCtrl = TextEditingController();
+  final envCtrl = TextEditingController();
   final statusCtrl = TextEditingController();
   final stdoutCtrl = TextEditingController();
   final stderrCtrl = TextEditingController();
-  final cmdArgsCtrl = TextEditingController();
   bool showGiven = false;
   bool showWhen = false;
   bool showThen = false;
@@ -33,7 +35,7 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(elevation: 5, child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-      showGiven ? GivenWidget() : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
+      showGiven ? GivenWidget(workDirCtrl: pwdCtrl, envCtrl: envCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
       showWhen ? WhenWidget(argsCtrl: cmdArgsCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
       showThen ? ThenWidget(statusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
     ],),)
@@ -60,8 +62,12 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
 
   void runProcess(String command) {
     if (command.isNotEmpty) try {
-      final args = cmdArgsCtrl.text.split(" ").where((a) => a.isNotEmpty).toList();
-      final proc = Process.runSync(command, args);
+      final args = cmdArgsCtrl.text.split(' ').where((a) => a.isNotEmpty).toList();
+      final pwd = pwdCtrl.text.isEmpty ? null : pwdCtrl.text;
+      final env = envCtrl.text.isEmpty ? null : Map.fromEntries(envCtrl.text.split(';').where((l) => l.isNotEmpty).map((l) {
+        final a = l.split('='); return MapEntry(a.first.trim(), a.last.trim());
+      }));
+      final proc = Process.runSync(command, args, workingDirectory: pwd, environment: env);
       statusCtrl.text = proc.exitCode.toString();
       stdoutCtrl.text = proc.stdout;
       stderrCtrl.text = proc.stderr;
