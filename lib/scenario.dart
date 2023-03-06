@@ -1,3 +1,4 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tommyspec/common/icontextbutton.dart';
@@ -18,6 +19,7 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   final statusCtrl = TextEditingController();
   final stdoutCtrl = TextEditingController();
   final stderrCtrl = TextEditingController();
+  final cmdArgsCtrl = TextEditingController();
   bool showGiven = false;
   bool showWhen = false;
   bool showThen = false;
@@ -32,7 +34,7 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   Widget build(BuildContext context) {
     return Card(elevation: 5, child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
       showGiven ? GivenWidget() : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
-      showWhen ? WhenWidget() : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
+      showWhen ? WhenWidget(argsCtrl: cmdArgsCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
       showThen ? ThenWidget(statusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
     ],),)
     ;
@@ -57,12 +59,16 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   }
 
   void runProcess(String command) {
-    final array = command.split(" ");
-    if (array.isNotEmpty) {
-      final proc = Process.runSync(array.first, array.sublist(1));
+    if (command.isNotEmpty) try {
+      final args = cmdArgsCtrl.text.split(" ").where((a) => a.isNotEmpty).toList();
+      final proc = Process.runSync(command, args);
       statusCtrl.text = proc.exitCode.toString();
       stdoutCtrl.text = proc.stdout;
       stderrCtrl.text = proc.stderr;
+    } catch(e) {
+      statusCtrl.text = "ERROR";
+      stdoutCtrl.text = "";
+      stderrCtrl.text = e.toString();
     }
   }
 }
