@@ -10,10 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  split_view: ^3.2.1
-  json_path: ^0.4.2
-  xpath_parse: ^1.0.2   # update to null-safety version
-  csv: ^5.0.1
+  scoped_model: ^2.0.0  # state management
+  split_view: ^3.2.1    # split view widget
+  json_path: ^0.4.2     # js path
+  xpath_parse: ^1.0.2   # xpath (update to null-safety version)
+  csv: ^5.0.1           # csv parser
 
 dev_dependencies:
   flutter_lints: ^2.0.0
