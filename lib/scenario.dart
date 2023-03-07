@@ -23,9 +23,10 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   final statusCtrl = TextEditingController();
   final stdoutCtrl = TextEditingController();
   final stderrCtrl = TextEditingController();
-  bool showGiven = false;
-  bool showWhen = false;
-  bool showThen = false;
+  bool _showGiven = false;
+  bool _showWhen = false;
+  bool _showThen = false;
+  bool _isDeleted = false;
 
   @override
   void initState() {
@@ -36,36 +37,43 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   @override
   Widget build(BuildContext context) {
     final i = widget.idx;
-    return Stack(
-      fit: StackFit.passthrough,
-      children: [
-        Card(elevation: 5, child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          showGiven ? GivenWidget(i) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
-          showWhen ? WhenWidget(i) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
-          showThen ? ThenWidget(i, statusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
-        ])),
-        Align(alignment: Alignment.topRight, child: IconButton(icon: Icon(Icons.close), onPressed: () {
-          print("object");
-        },),)
-      ],
+    return Visibility(
+      visible: !_isDeleted,
+      child: Stack(
+        fit: StackFit.passthrough,
+        children: [
+          Card(elevation: 5, child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+            _showGiven ? GivenWidget(i) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
+            _showWhen ? WhenWidget(i) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
+            _showThen ? ThenWidget(i, statusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
+          ])),
+          Align(alignment: Alignment.topRight, child: IconButton(icon: Icon(Icons.close), onPressed: _delete))
+        ],
+      ),
     );
   }
 
   void _onGivenPressed() {
     setState(() {
-      showGiven = !showGiven;
+      _showGiven = !_showGiven;
     });
   }
 
   void _onWhenPressed() {
     setState(() {
-      showWhen = !showWhen;
+      _showWhen = !_showWhen;
     });
   }
 
   void _onThenPressed() {
     setState(() {
-      showThen = !showThen;
+      _showThen = !_showThen;
+    });
+  }
+
+  void _delete() {
+    setState(() {
+      _isDeleted = true;
     });
   }
 
