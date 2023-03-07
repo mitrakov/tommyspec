@@ -35,12 +35,20 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(elevation: 5, child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-      showGiven ? GivenWidget(widget.idx) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
-      showWhen ? WhenWidget(widget.idx) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
-      showThen ? ThenWidget(widget.idx, statusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
-    ],),)
-    ;
+    final i = widget.idx;
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        Card(elevation: 5, child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          showGiven ? GivenWidget(i) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
+          showWhen ? WhenWidget(i) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
+          showThen ? ThenWidget(i, statusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
+        ])),
+        Align(alignment: Alignment.topRight, child: IconButton(icon: Icon(Icons.close), onPressed: () {
+          print("object");
+        },),)
+      ],
+    );
   }
 
   void _onGivenPressed() {
