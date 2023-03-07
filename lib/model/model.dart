@@ -19,6 +19,8 @@ class TestModel extends Model {
 
   List<String> getArgs(int scenario) => _scenarios[scenario].args;
 
+  String getArgsAsString(int scenario) => _scenarios[scenario].args.join(' ');
+
   String getStatus(int scenario) => _scenarios[scenario].expectedStatus;
 
   bool stdOutOrErr(int scenario, int and) => _scenarios[scenario].ands[and].stdOutOrErr;
