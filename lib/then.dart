@@ -12,7 +12,7 @@ class ThenWidget extends StatefulWidget { // TODO Stateless?
   final TextEditingController stdoutCtrl;
   final TextEditingController stderrCtrl;
 
-  const ThenWidget(this.idx, {super.key, required this.statusCtrl, required this.stdoutCtrl, required this.stderrCtrl});
+  const ThenWidget(this.idx, {required this.statusCtrl, required this.stdoutCtrl, required this.stderrCtrl});
 
   @override
   State<ThenWidget> createState() => _ThenWidgetState();
@@ -44,7 +44,7 @@ class _ThenWidgetState extends State<ThenWidget> {
               itemBuilder: (context, i) {
                 return i == andsCount
                     ? TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "And", onTap: () => _addAndItem(model))
-                    : AndWidget(stdoutCtrl: widget.stdoutCtrl, stderrCtrl: widget.stderrCtrl);
+                    : AndWidget(widget.idx, i, stdoutCtrl: widget.stdoutCtrl, stderrCtrl: widget.stderrCtrl);
               }
           ))
         ]),);
