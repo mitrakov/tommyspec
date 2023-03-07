@@ -6,46 +6,30 @@ class TestModel extends Model {
 
   // getters
   String get command => _command;
+
+  int get scenariosCount => _scenarios.length;
+
+  int getAndsCount(int scenario) => _scenarios[scenario].ands.length;
+
+  String? getPwd(int scenario) => _scenarios[scenario].pwd;
   
-  String? getPwd(int scenario) {
-    return _scenarios[scenario].pwd;
-  }
+  Map<String, String>? getEnv(int scenario) => _scenarios[scenario].env;
   
-  Map<String, String>? getEnv(int scenario) {
-    return _scenarios[scenario].env;
-  }
-  
-  String getEnvAsString(int scenario) {
-    return _scenarios[scenario].env?.entries.map((e) => "${e.key}=${e.value}").join(';') ?? "";
-  }
+  String getEnvAsString(int scenario) => _scenarios[scenario].env?.entries.map((e) => "${e.key}=${e.value}").join(';') ?? "";
 
-  List<String> getArgs(int scenario) {
-    return _scenarios[scenario].args;
-  }
+  List<String> getArgs(int scenario) => _scenarios[scenario].args;
 
-  String getStatus(int scenario) {
-    return _scenarios[scenario].expectedStatus;
-  }
+  String getStatus(int scenario) => _scenarios[scenario].expectedStatus;
 
-  bool stdOutOrErr(int scenario, int and) {
-    return _scenarios[scenario].ands[and].stdOutOrErr;
-  }
+  bool stdOutOrErr(int scenario, int and) => _scenarios[scenario].ands[and].stdOutOrErr;
 
-  String as(int scenario, int and) {
-    return _scenarios[scenario].ands[and].as;
-  }
+  String as(int scenario, int and) => _scenarios[scenario].ands[and].as;
 
-  String query(int scenario, int and) {
-    return _scenarios[scenario].ands[and].query;
-  }
+  String query(int scenario, int and) => _scenarios[scenario].ands[and].query;
 
-  String op(int scenario, int and) {
-    return _scenarios[scenario].ands[and].op;
-  }
+  String op(int scenario, int and) => _scenarios[scenario].ands[and].op;
 
-  String expected(int scenario, int and) {
-    return _scenarios[scenario].ands[and].expected;
-  }
+  String expected(int scenario, int and) => _scenarios[scenario].ands[and].expected;
 
   // setters
   set command(String cmd) {
