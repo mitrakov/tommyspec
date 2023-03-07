@@ -21,26 +21,21 @@ class TestModel extends Model {
 
   String getArgsAsString(int scenario) => _scenarios[scenario].args.join(' ');
 
-  String getStatus(int scenario) => _scenarios[scenario].expectedStatus;
+  String getExpectedStatus(int scenario) => _scenarios[scenario].expectedStatus;
 
-  bool stdOutOrErr(int scenario, int and) => _scenarios[scenario].ands[and].stdOutOrErr;
+  bool getStdOutOrErr(int scenario, int and) => _scenarios[scenario].ands[and].stdOutOrErr;
 
-  String as(int scenario, int and) => _scenarios[scenario].ands[and].as;
+  String getAs(int scenario, int and) => _scenarios[scenario].ands[and].as;
 
-  String query(int scenario, int and) => _scenarios[scenario].ands[and].query;
+  String getQuery(int scenario, int and) => _scenarios[scenario].ands[and].query;
 
-  String op(int scenario, int and) => _scenarios[scenario].ands[and].op;
+  String getOp(int scenario, int and) => _scenarios[scenario].ands[and].op;
 
-  String expected(int scenario, int and) => _scenarios[scenario].ands[and].expected;
+  String getExpectedValue(int scenario, int and) => _scenarios[scenario].ands[and].expected;
 
   // setters
   set command(String cmd) {
     _command = cmd.trim();
-    notifyListeners();
-  }
-
-  void setExpectedStatus(int scenario, String status) {
-    _scenarios[scenario].expectedStatus = status.trim();
     notifyListeners();
   }
 
@@ -59,6 +54,11 @@ class TestModel extends Model {
 
   void setArgs(int scenario, String args) {
     _scenarios[scenario].args = args.trim().split(' ').where((a) => a.isNotEmpty).toList();
+    notifyListeners();
+  }
+
+  void setExpectedStatus(int scenario, String status) {
+    _scenarios[scenario].expectedStatus = status.trim();
     notifyListeners();
   }
 

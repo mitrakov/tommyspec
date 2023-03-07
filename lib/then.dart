@@ -6,7 +6,7 @@ import 'package:tommyspec/common/expand.dart';
 import 'package:tommyspec/common/icontextbutton.dart';
 import 'package:tommyspec/model/model.dart';
 
-class ThenWidget extends StatefulWidget {
+class ThenWidget extends StatefulWidget { // TODO Stateless?
   final int idx;
   final TextEditingController statusCtrl;
   final TextEditingController stdoutCtrl;
@@ -19,8 +19,6 @@ class ThenWidget extends StatefulWidget {
 }
 
 class _ThenWidgetState extends State<ThenWidget> {
-  final statusExpectedCtrl = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<TestModel>(
@@ -32,8 +30,8 @@ class _ThenWidgetState extends State<ThenWidget> {
             Text("Status code"),
             Expanded(child: TextField(controller: widget.statusCtrl, readOnly: true,)),
             Text("should be"),
-            Expanded(child: TextField(controller: statusExpectedCtrl,)),
-            _isStatusOk()
+            Expanded(child: TextFormField(initialValue: model.getExpectedStatus(widget.idx), onChanged: (s) => model.setExpectedStatus(widget.idx, s),)),
+            _isStatusOk(model)
                 ? Icon(Icons.done_outline, color: Colors.green)
                 : Icon(Icons.do_not_disturb_alt_rounded, color: Colors.red)
           ],),
@@ -54,13 +52,11 @@ class _ThenWidgetState extends State<ThenWidget> {
     );
   }
 
-  bool _isStatusOk() {
-    return widget.statusCtrl.text.isNotEmpty && widget.statusCtrl.text == statusExpectedCtrl.text.trim();
+  bool _isStatusOk(TestModel model) {
+    return widget.statusCtrl.text.isNotEmpty && widget.statusCtrl.text == model.getExpectedStatus(widget.idx);
   }
 
   void _addAndItem(TestModel model) {
-    //setState(() {
-      model.addAndCondition(widget.idx);
-    //});
+    model.addAndCondition(widget.idx);
   }
 }
