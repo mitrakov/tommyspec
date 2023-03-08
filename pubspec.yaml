@@ -19,7 +19,7 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^2.0.0
-  build_runner: ^2.3.3
+  build_runner: ^2.3.3  # flutter pub run build_runner build
   json_serializable: ^6.6.1
 
 flutter:

@@ -1,16 +1,20 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:scoped_model/scoped_model.dart';
 part 'model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class TestModel extends Model {
   String _command = "";
-  final List<_ScenarioModel> _scenarios = [];
+  List<ScenarioModel> _scenarios = [];
 
   TestModel();
 
   // getters
   String get command => _command;
+
+  @protected // used only for json generation
+  List<ScenarioModel> get scenarios => _scenarios;
 
   int get scenariosCount => _scenarios.length;
 
@@ -42,6 +46,11 @@ class TestModel extends Model {
   set command(String cmd) {
     _command = cmd.trim();
     notifyListeners();
+  }
+
+  @protected // used only for json generation
+  set scenarios(List<ScenarioModel> list) {
+    _scenarios = list;
   }
 
   void setWorkingDirectory(int scenario, String pwd) {
@@ -94,12 +103,12 @@ class TestModel extends Model {
 
   // adders
   void addScenario() {
-    _scenarios.add(_ScenarioModel());
+    _scenarios.add(ScenarioModel());
     notifyListeners();
   }
 
   void addAndCondition(int scenario) {
-    _scenarios[scenario].ands.add(_AndModel());
+    _scenarios[scenario].ands.add(AndModel());
     notifyListeners();
   }
 
@@ -108,18 +117,30 @@ class TestModel extends Model {
   Map<String, dynamic> toJson() => _$TestModelToJson(this);
 }
 
-class _ScenarioModel {
+@JsonSerializable(explicitToJson: true)
+class ScenarioModel {
   String? pwd;
   Map<String, String>? env;
   List<String> args = [];
   String expectedStatus = ""; // may be empty, that's why String (not int)
-  List<_AndModel> ands = [];
+  List<AndModel> ands = [];
+
+  ScenarioModel();
+
+  factory ScenarioModel.fromJson(Map<String, dynamic> json) => _$ScenarioModelFromJson(json);
+  Map<String, dynamic> toJson() => _$ScenarioModelToJson(this);
 }
 
-class _AndModel {
+@JsonSerializable(explicitToJson: true)
+class AndModel {
   bool stdOutOrErr = true;
   String as = "CSV/Text";
   String query = "";
   String op = "=";
   String expected = "";
+
+  AndModel();
+
+  factory AndModel.fromJson(Map<String, dynamic> json) => _$AndModelFromJson(json);
+  Map<String, dynamic> toJson() => _$AndModelToJson(this);
 }
