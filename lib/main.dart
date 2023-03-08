@@ -33,13 +33,13 @@ class _MyAppState extends State<MyApp> {
               PlatformMenuItem(label: "Quit", shortcut: const SingleActivator(LogicalKeyboardKey.keyQ, meta: true), onSelected: () => exit(0))
             ]),
             PlatformMenu(label: "File", menus: [
-              PlatformMenuItem(label: "Load", shortcut: SingleActivator(LogicalKeyboardKey.keyO, meta: true), onSelected: () => print("Load")),
+              PlatformMenuItem(label: "Load", shortcut: SingleActivator(LogicalKeyboardKey.keyO, meta: true), onSelected: () => _openFile()),
               PlatformMenuItem(label: "Save", shortcut: SingleActivator(LogicalKeyboardKey.keyS, meta: true), onSelected: () => _saveFile(model))
             ])
           ],
           child: Shortcuts(
             shortcuts: {
-              SingleActivator(LogicalKeyboardKey.enter): RunIntent()
+              SingleActivator(LogicalKeyboardKey.enter): RunIntent() // move to menu?
             },
             child: Actions(
               actions: {
@@ -82,6 +82,17 @@ class _MyAppState extends State<MyApp> {
     if (filePath != null) { // user may cancel
       // TODO: check on Windows "if file exists" (on MacOS norm)
       File(filePath).writeAsString(jsonEncode(model.toJson()), flush: true);
+    }
+  }
+
+  void _openFile() async {
+    final result = await FilePicker.platform.pickFiles(dialogTitle: "Open file", type: FileType.custom, allowedExtensions: ["json"], withData: true, lockParentWindow: true);
+    if (result != null) { // user may cancel
+      final bytes = result.files.first.bytes!; // may be null?
+      final str = Utf8Decoder().convert(bytes);
+      final json = jsonDecode(str);
+      final model = TestModel.fromJson(json);
+      print(model.command);
     }
   }
 }

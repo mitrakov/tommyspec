@@ -13,9 +13,6 @@ class TestModel extends Model {
   // getters
   String get command => _command;
 
-  @protected // used only for json generation
-  List<ScenarioModel> get scenarios => _scenarios;
-
   int get scenariosCount => _scenarios.length;
 
   int getAndsCount(int scenario) => _scenarios[scenario].ands.length;
@@ -46,11 +43,6 @@ class TestModel extends Model {
   set command(String cmd) {
     _command = cmd.trim();
     notifyListeners();
-  }
-
-  @protected // used only for json generation
-  set scenarios(List<ScenarioModel> list) {
-    _scenarios = list;
   }
 
   void setWorkingDirectory(int scenario, String pwd) {
@@ -113,6 +105,14 @@ class TestModel extends Model {
   }
 
   // json serialization
+  @protected // used only for json generation
+  List<ScenarioModel> get scenarios => _scenarios;
+
+  @protected // used only for json generation
+  set scenarios(List<ScenarioModel> list) {
+    _scenarios = list;
+  }
+
   factory TestModel.fromJson(Map<String, dynamic> json) => _$TestModelFromJson(json);
   Map<String, dynamic> toJson() => _$TestModelToJson(this);
 }
