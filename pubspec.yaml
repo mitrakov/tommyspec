@@ -10,17 +10,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  scoped_model: ^2.0.0  # state management
-  split_view: ^3.2.1    # split view widget
-  json_path: ^0.4.2     # js path
-  xpath_parse: ^1.0.2   # xpath (update to null-safety version)
-  csv: ^5.0.1           # csv parser
-  json_annotation: ^4.8.0
+  scoped_model: ^2.0.0      # state management
+  split_view: ^3.2.1        # split view widget
+  json_path: ^0.4.2         # js path
+  xpath_parse: ^1.0.2       # xpath (update to null-safety version)
+  csv: ^5.0.1               # csv parser
+  file_picker: ^5.2.5       # openFile and saveFile dialog
+  flutter_platform_alert: ^0.3.0 # native dialogs       TODO: maybe useless!
+  json_annotation: ^4.8.0   # convert class to json
 
 dev_dependencies:
   flutter_lints: ^2.0.0
-  build_runner: ^2.3.3  # flutter pub run build_runner build
-  json_serializable: ^6.6.1
+  build_runner: ^2.3.3      # convert class to json (flutter pub run build_runner build)
+  json_serializable: ^6.6.1 # convert class to json
 
 flutter:
   uses-material-design: true

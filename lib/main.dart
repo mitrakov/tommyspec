@@ -1,4 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors
+import 'dart:convert';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -24,33 +27,44 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<TestModel>(
         builder: (context, _, model) {
-        return Shortcuts(
-          shortcuts: {
-            SingleActivator(LogicalKeyboardKey.enter): RunIntent()
-          },
-          child: Actions(
-            actions: {
-              RunIntent: CallbackAction(onInvoke: (_) => _run(model.command))
-            },
-            child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
-                SizedBox(
-                  width: 300,
-                  child: TextFormField(initialValue: model.command, decoration: InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)
-                ),
-                OutlinedButton(child: Text("Run"), onPressed: () => _run(model.command))
-              ]))),
-              Expanded(child: ListView.builder(
-                  itemCount: model.scenariosCount + 1,
-                  itemBuilder: (context, i) {
-                    return i == model.scenariosCount
-                        ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      TrixIconTextButton(icon: Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => _addScenario(model))
-                    ],)
-                        : ScenarioWidget(i, runCtrl);
-                  }
-              ))
+        return PlatformMenuBar(
+          menus: [
+            PlatformMenu(label: "Hey-Hey", menus: [
+              PlatformMenuItem(label: "Quit", shortcut: const SingleActivator(LogicalKeyboardKey.keyQ, meta: true), onSelected: () => exit(0))
+            ]),
+            PlatformMenu(label: "File", menus: [
+              PlatformMenuItem(label: "Load", shortcut: SingleActivator(LogicalKeyboardKey.keyO, meta: true), onSelected: () => print("Load")),
+              PlatformMenuItem(label: "Save", shortcut: SingleActivator(LogicalKeyboardKey.keyS, meta: true), onSelected: () => _saveFile(model))
             ])
+          ],
+          child: Shortcuts(
+            shortcuts: {
+              SingleActivator(LogicalKeyboardKey.enter): RunIntent()
+            },
+            child: Actions(
+              actions: {
+                RunIntent: CallbackAction(onInvoke: (_) => _run(model.command))
+              },
+              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
+                  SizedBox(
+                      width: 300,
+                      child: TextFormField(initialValue: model.command, decoration: InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)
+                  ),
+                  OutlinedButton(child: Text("Run"), onPressed: () => _run(model.command))
+                ]))),
+                Expanded(child: ListView.builder(
+                    itemCount: model.scenariosCount + 1,
+                    itemBuilder: (context, i) {
+                      return i == model.scenariosCount
+                          ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        TrixIconTextButton(icon: Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => model.addScenario())
+                      ],)
+                          : ScenarioWidget(i, runCtrl);
+                    }
+                ))
+              ])
+            )
           )
         );
       }
@@ -63,8 +77,12 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void _addScenario(TestModel model) {
-    model.addScenario();
+  void _saveFile(TestModel model) async {
+    final filePath = await FilePicker.platform.saveFile(dialogTitle: "Save file", fileName: "test.json", allowedExtensions: ["json"], lockParentWindow: true);
+    if (filePath != null) { // user may cancel
+      // TODO: check on Windows "if file exists" (on MacOS norm)
+      File(filePath).writeAsString(jsonEncode(model.toJson()), flush: true);
+    }
   }
 }
 
