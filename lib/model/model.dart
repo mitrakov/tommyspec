@@ -1,8 +1,13 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:scoped_model/scoped_model.dart';
+part 'model.g.dart';
 
+@JsonSerializable()
 class TestModel extends Model {
   String _command = "";
   final List<_ScenarioModel> _scenarios = [];
+
+  TestModel();
 
   // getters
   String get command => _command;
@@ -97,6 +102,10 @@ class TestModel extends Model {
     _scenarios[scenario].ands.add(_AndModel());
     notifyListeners();
   }
+
+  // json serialization
+  factory TestModel.fromJson(Map<String, dynamic> json) => _$TestModelFromJson(json);
+  Map<String, dynamic> toJson() => _$TestModelToJson(this);
 }
 
 class _ScenarioModel {
