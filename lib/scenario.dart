@@ -32,6 +32,11 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   void initState() {
     super.initState();
     widget.runController.register(runProcess);
+    final model = ScopedModel.of<TestModel>(context);
+    final i = widget.idx;
+    _showGiven = model.getPwd(i) != null && model.getEnv(i) != null;
+    _showWhen = model.getArgs(i).isNotEmpty;
+    _showThen = model.getAndsCount(i) > 0;
   }
 
   @override
