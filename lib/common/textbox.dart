@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TrixText extends StatelessWidget {
   final TextField child;
@@ -10,10 +11,18 @@ class TrixText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Focus(child: child, onFocusChange: (focusTaken) {
-      if (!focusTaken) {
-        onChanged(child.controller?.text ?? "");
-      }
-    });
+    return KeyboardListener(
+      focusNode: FocusNode(),
+      onKeyEvent: (event) {
+        if (event.logicalKey == LogicalKeyboardKey.enter) {
+          onChanged(child.controller?.text ?? "");
+        }
+      },
+      child: Focus(child: child, onFocusChange: (focusTaken) {
+        if (!focusTaken) {
+          onChanged(child.controller?.text ?? "");
+        }
+      })
+    );
   }
 }
