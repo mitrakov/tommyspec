@@ -35,7 +35,7 @@ class TestModel extends Model {
 
   String getQuery(int scenario, int and) => _scenarios[scenario].ands[and].query;
 
-  String getOp(int scenario, int and) => _scenarios[scenario].ands[and].op;
+  String getOperation(int scenario, int and) => _scenarios[scenario].ands[and].op;
 
   String getExpectedValue(int scenario, int and) => _scenarios[scenario].ands[and].expected;
 

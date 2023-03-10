@@ -61,13 +61,13 @@ class _AndWidgetState extends State<AndWidget> {
                     Expanded(child: TextField(controller: actualCtrl, maxLines: 1024)),
                     Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
                       Row(mainAxisSize: MainAxisSize.min, children: [
-                        Expanded(child: TrixDropdown(hintText: "Process", options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(j, i, s==stdout))),
-                        Expanded(child: TrixDropdown(hintText: "As", options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(j, i, s)))
+                        Expanded(child: TrixDropdown(hintText: "Process", value: model.getStdOutOrErr(j, i) ? stdout : stderr, options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(j, i, s==stdout))),
+                        Expanded(child: TrixDropdown(hintText: "As", value: model.getAs(j, i), options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(j, i, s)))
                       ]),
                       TrixText(child: TextField(controller: queryCtrl), onChanged: (s) => model.setQuery(j, i, s)),
                       Row(mainAxisSize: MainAxisSize.min, children: [
                         const Text("Should be"),
-                        Expanded(child: TrixDropdown(hintText: "Op", options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(j, i, s))),
+                        Expanded(child: TrixDropdown(hintText: "Op", value: model.getOperation(j, i), options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(j, i, s))),
                         Expanded(child: TrixText(child: TextField(controller: expectedCtrl), onChanged: (s) => model.setExpectedValue(j, i, s))),
                         _isOk(model) ? const Icon(Icons.done_outline, color: Colors.green) : const Icon(Icons.do_not_disturb, color: Colors.red),
                       ])
@@ -123,7 +123,7 @@ class _AndWidgetState extends State<AndWidget> {
     final expected = model.getExpectedValue(j, i);
     if (expected.isEmpty) return false;
 
-    switch (model.getOp(j, i)) {
+    switch (model.getOperation(j, i)) {
       case eq: return actual == expected;
       case gt:
         final x = double.tryParse(actual);
