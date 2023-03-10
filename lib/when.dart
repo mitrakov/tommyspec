@@ -5,18 +5,27 @@ import 'package:tommyspec/model/model.dart';
 
 class WhenWidget extends StatelessWidget {
   final int idx;
+  final argsController = TextEditingController();
 
-  const WhenWidget(this.idx);
+  WhenWidget(this.idx);
 
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<TestModel>(
       builder: (context, _, model) {
+        updateTextFields(model);
         return TrixContainer(child: Row(mainAxisSize: MainAxisSize.min, children: [
           Text("When"),
-          SizedBox(width: 200, child: TextFormField(initialValue: model.getArgsAsString(idx), onChanged: (s) => model.setArgs(idx, s),)),
+          SizedBox(width: 200, child: TextField(controller: argsController, onChanged: (s) => model.setArgs(idx, s),)),
         ]));
       }
     );
+  }
+
+  void updateTextFields(TestModel model) {
+    if (argsController.text != model.getArgsAsString(idx)) {
+      // it's possible when we load a new model with ⌘+O
+      argsController.text = model.getArgsAsString(idx);
+    }
   }
 }
