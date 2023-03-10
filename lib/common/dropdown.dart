@@ -1,3 +1,4 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
 import 'package:flutter/material.dart';
 
 class TrixDropdown<T> extends StatefulWidget {
@@ -6,6 +7,7 @@ class TrixDropdown<T> extends StatefulWidget {
   final String Function(T) getLabel;
   final void Function(T) onChanged;
   final T? value;
+  final ValueNotifier<T>? controller;
 
   const TrixDropdown({
     super.key,
@@ -14,6 +16,7 @@ class TrixDropdown<T> extends StatefulWidget {
     required this.getLabel,
     required this.onChanged,
     this.value,
+    this.controller
   });
 
   @override
@@ -31,6 +34,7 @@ class _TrixDropdownState<T> extends State<TrixDropdown<T>> {
 
   @override
   Widget build(BuildContext context) {
+    value = widget.controller?.value ?? value;
     return FormField<T>(
       builder: (FormFieldState<T> state) {
         return InputDecorator(
