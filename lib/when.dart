@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tommyspec/common/roundbox.dart';
+import 'package:tommyspec/common/textbox.dart';
 import 'package:tommyspec/model/model.dart';
 
 class WhenWidget extends StatelessWidget {
@@ -13,19 +14,12 @@ class WhenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<TestModel>(
       builder: (context, _, model) {
-        _updateTextFields(model);
+        argsController.text = model.getArgsAsString(idx);
         return TrixContainer(child: Row(mainAxisSize: MainAxisSize.min, children: [
           Text("When"),
-          SizedBox(width: 200, child: TextField(controller: argsController, onChanged: (s) => model.setArgs(idx, s),)),
+          SizedBox(width: 200, child: TrixText(child: TextField(controller: argsController), onChanged: (s) => model.setArgs(idx, s))),
         ]));
       }
     );
-  }
-
-  void _updateTextFields(TestModel model) {
-    if (argsController.text != model.getArgsAsString(idx)) {
-      // it's possible when we load a new model with ⌘+O
-      argsController.text = model.getArgsAsString(idx);
-    }
   }
 }

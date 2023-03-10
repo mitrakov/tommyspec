@@ -5,6 +5,7 @@ import 'package:json_path/json_path.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tommyspec/common/dropdown.dart';
 import 'package:tommyspec/common/expand.dart';
+import 'package:tommyspec/common/textbox.dart';
 import 'package:tommyspec/model/model.dart';
 import 'package:tommyspec/utils/txt_processor.dart';
 import 'package:xpath_parse/xpath_selector.dart'; // update to null-safety version
@@ -44,7 +45,8 @@ class _AndWidgetState extends State<AndWidget> {
     final i = widget.idx;
     return ScopedModelDescendant<TestModel>(
       builder: (context, _, model) {
-        _updateTextFields(model);
+        queryCtrl.text = model.getQuery(j, i);
+        expectedCtrl.text = model.getExpectedValue(j, i);
         _process(model);
         return Visibility(
           visible: !_isDeleted,
@@ -62,11 +64,11 @@ class _AndWidgetState extends State<AndWidget> {
                         Expanded(child: TrixDropdown(hintText: "Process", options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(j, i, s==stdout))),
                         Expanded(child: TrixDropdown(hintText: "As", options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(j, i, s)))
                       ]),
-                      TextField(controller: queryCtrl, onChanged: (s) => model.setQuery(j, i, s)),
+                      TrixText(child: TextField(controller: queryCtrl), onChanged: (s) => model.setQuery(j, i, s)),
                       Row(mainAxisSize: MainAxisSize.min, children: [
                         const Text("Should be"),
                         Expanded(child: TrixDropdown(hintText: "Op", options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(j, i, s))),
-                        Expanded(child: TextField(controller: expectedCtrl, onChanged: (s) => model.setExpectedValue(j, i, s))),
+                        Expanded(child: TrixText(child: TextField(controller: expectedCtrl), onChanged: (s) => model.setExpectedValue(j, i, s))),
                         _isOk(model) ? const Icon(Icons.done_outline, color: Colors.green) : const Icon(Icons.do_not_disturb, color: Colors.red),
                       ])
                     ]))
@@ -79,18 +81,6 @@ class _AndWidgetState extends State<AndWidget> {
         );
       }
     );
-  }
-
-  void _updateTextFields(TestModel model) {
-    // it's possible when we load a new model with ⌘+O
-    final j = widget.scenarioIdx;
-    final i = widget.idx;
-    if (queryCtrl.text != model.getQuery(j, i)) {
-      queryCtrl.text = model.getQuery(j, i);
-    }
-    if (expectedCtrl.text != model.getExpectedValue(j, i)) {
-      expectedCtrl.text = model.getExpectedValue(j, i);
-    }
   }
 
   void _delete() {
