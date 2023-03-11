@@ -12,7 +12,7 @@ import 'package:tommyspec/when.dart';
 
 class ScenarioWidget extends StatefulWidget {
   final int idx;
-  final FunctionController<String> runController;
+  final FunctionController<TestModel> runController;
 
   const ScenarioWidget(this.idx, this.runController);
 
@@ -83,9 +83,9 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
     });
   }
 
-  void runProcess(String command) async {
+  void runProcess(TestModel model) async {
     final i = widget.idx;
-    final model = ScopedModel.of<TestModel>(context);
+    final command = model.command;
     final workDir = model.getPwd(i);
     final env = model.getEnv(i);
     final args = model.getArgs(i);

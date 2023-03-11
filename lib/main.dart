@@ -20,7 +20,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final runCtrl = FunctionController<String>();
+  final runCtrl = FunctionController<TestModel>();
   final commandController = TextEditingController();
   TestModel _model = TestModel();
 
@@ -30,51 +30,53 @@ class _MyAppState extends State<MyApp> {
     return ScopedModel<TestModel>(
       model: _model,
       child: PlatformMenuBar(
-          menus: [
-            PlatformMenu(label: "Hey-Hey", menus: [
-              PlatformMenuItem(label: "Quit", shortcut: const SingleActivator(LogicalKeyboardKey.keyQ, meta: true), onSelected: () => exit(0))
-            ]),
-            PlatformMenu(label: "File", menus: [
-              PlatformMenuItem(label: "Open", shortcut: SingleActivator(LogicalKeyboardKey.keyO, meta: true), onSelected: _openFile),
-              PlatformMenuItem(label: "Save", shortcut: SingleActivator(LogicalKeyboardKey.keyS, meta: true), onSelected: _saveFile)
-            ])
-          ],
-          child: Shortcuts(
-              shortcuts: {
-                SingleActivator(LogicalKeyboardKey.enter): RunIntent() // move to menu?
+        menus: [
+          PlatformMenu(label: "Hey-Hey", menus: [
+            PlatformMenuItem(label: "Quit", shortcut: const SingleActivator(LogicalKeyboardKey.keyQ, meta: true), onSelected: () => exit(0))
+          ]),
+          PlatformMenu(label: "File", menus: [
+            PlatformMenuItem(label: "Open", shortcut: SingleActivator(LogicalKeyboardKey.keyO, meta: true), onSelected: _openFile),
+            PlatformMenuItem(label: "Save", shortcut: SingleActivator(LogicalKeyboardKey.keyS, meta: true), onSelected: _saveFile)
+          ])
+        ],
+        child: Shortcuts(
+          shortcuts: {
+            SingleActivator(LogicalKeyboardKey.enter): RunIntent() // move to menu?
+          },
+          child: ScopedModelDescendant<TestModel>(builder: (context, _, model) { // don't use "_model" directly; we need this to update the widget tree
+            return Actions(
+              actions: {
+                RunIntent: CallbackAction(onInvoke: (_) => _run())
               },
-              child: Actions(
-                  actions: {
-                    RunIntent: CallbackAction(onInvoke: (_) => _run(_model.command))
-                  },
-                  child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
-                      SizedBox(
-                          width: 300,
-                          child: TextField(controller: commandController, decoration: InputDecoration(hintText: "Command"), onChanged: (s) => _model.command = s)
-                      ),
-                      OutlinedButton(child: Text("Run"), onPressed: () => _run(_model.command))
-                    ]))),
-                    Expanded(child: ListView.builder(
-                        itemCount: _model.scenariosCount + 1,
-                        itemBuilder: (context, i) {
-                          return i == _model.scenariosCount
-                              ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                            TrixIconTextButton(icon: Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => _model.addScenario())
-                          ],)
-                              : ScenarioWidget(i, runCtrl);
-                        }
-                    ))
-                  ])
-              )
-          )
+              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
+                  SizedBox(
+                      width: 300,
+                      child: TextField(controller: commandController, decoration: InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)
+                  ),
+                  OutlinedButton(child: Text("Run"), onPressed: _run)
+                ]))),
+                Expanded(child: ListView.builder(
+                    itemCount: model.scenariosCount + 1,
+                    itemBuilder: (context, i) {
+                      return i == model.scenariosCount
+                          ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        TrixIconTextButton(icon: Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => model.addScenario())
+                      ],)
+                          : ScenarioWidget(i, runCtrl);
+                    }
+                ))
+              ])
+            );
+          })
+        )
       )
     );
   }
 
-  void _run(String command) {
+  void _run() {
     setState(() { // we need this to update children; TODO really?
-      runCtrl.run(command);
+      runCtrl.run(_model);
     });
   }
 
