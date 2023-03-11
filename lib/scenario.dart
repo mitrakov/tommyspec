@@ -1,4 +1,5 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -82,14 +83,27 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
     });
   }
 
-  void runProcess(String command) {
+  void runProcess(String command) async {
+    final i = widget.idx;
     final model = ScopedModel.of<TestModel>(context);
+    final workDir = model.getPwd(i);
+    final env = model.getEnv(i);
+    final args = model.getArgs(i);
+    final input = model.getStdin(i);
     if (command.isNotEmpty) try {
-      final args = model.getArgs(widget.idx);
-      final proc = Process.runSync(command, args, workingDirectory: model.getPwd(widget.idx), environment: model.getEnv(widget.idx));
-      statusCtrl.text = proc.exitCode.toString();
-      stdoutCtrl.text = proc.stdout;
-      stderrCtrl.text = proc.stderr;
+      if (input.isEmpty) {
+        final proc = Process.runSync(command, args, workingDirectory: workDir, environment: env);
+        statusCtrl.text = proc.exitCode.toString();
+        stdoutCtrl.text = proc.stdout;
+        stderrCtrl.text = proc.stderr;
+      } else {
+        final proc = await Process.start(command, args, workingDirectory: workDir, environment: env);
+        proc.stdin.add(utf8.encoder.convert(input));
+        proc.stdin.close();
+        statusCtrl.text = (await proc.exitCode).toString();
+        stdoutCtrl.text = (await proc.stdout.transform(utf8.decoder).toList()).join('\n');
+        stderrCtrl.text = (await proc.stderr.transform(utf8.decoder).toList()).join('\n');
+      }
     } catch(e) {
       statusCtrl.text = "ERROR";
       stdoutCtrl.text = "";

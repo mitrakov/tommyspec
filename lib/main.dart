@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
     final result = await FilePicker.platform.pickFiles(dialogTitle: "Open file", type: FileType.custom, allowedExtensions: ["json"], withData: true, lockParentWindow: true);
     if (result != null) { // user may cancel
       final bytes = result.files.first.bytes!;
-      final str = Utf8Decoder().convert(bytes);
+      final str = const Utf8Decoder().convert(bytes);
       final json = jsonDecode(str);
       final model = TestModel.fromJson(json);
       setState(() {

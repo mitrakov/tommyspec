@@ -25,6 +25,8 @@ class TestModel extends Model {
 
   List<String> getArgs(int scenario) => _scenarios[scenario].args;
 
+  String getStdin(int scenario) => _scenarios[scenario].stdin;
+
   String getArgsAsString(int scenario) => _scenarios[scenario].args.join(' ');
 
   String getExpectedStatus(int scenario) => _scenarios[scenario].expectedStatus;
@@ -60,6 +62,11 @@ class TestModel extends Model {
 
   void setArgs(int scenario, String args) {
     _scenarios[scenario].args = args.trim().split(' ').where((a) => a.isNotEmpty).toList();
+    notifyListeners();
+  }
+
+  void setStdIn(int scenario, String input) {
+    _scenarios[scenario].stdin = input.trim();
     notifyListeners();
   }
 
@@ -122,6 +129,7 @@ class ScenarioModel {
   String? pwd;
   Map<String, String>? env;
   List<String> args = [];
+  String stdin = "";
   String expectedStatus = ""; // may be empty, that's why String (not int)
   List<AndModel> ands = [];
 
