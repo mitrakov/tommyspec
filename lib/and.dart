@@ -1,3 +1,4 @@
+// ignore_for_file: use_key_in_widget_constructors
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class AndWidget extends StatefulWidget {
   final int idx;
   final TextEditingController stdoutCtrl;
   final TextEditingController stderrCtrl;
+
   const AndWidget(this.scenarioIdx, this.idx, {required this.stdoutCtrl, required this.stderrCtrl});
 
   @override
@@ -57,7 +59,7 @@ class _AndWidgetState extends State<AndWidget> {
             fit: StackFit.passthrough,
             children: [
               TrixExpandPanel(
-                headerWidget: Text("AND"),
+                headerWidget: const Text("AND"),
                 child: SizedBox(
                   height: 145,
                   child: Row(children: [
@@ -78,7 +80,7 @@ class _AndWidgetState extends State<AndWidget> {
                   ])
                 )
               ),
-              Align(alignment: Alignment.topRight, child: IconButton(icon: Icon(Icons.close), onPressed: _delete),)
+              Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: _delete),)
             ],
           ),
         );

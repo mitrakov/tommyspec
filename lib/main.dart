@@ -55,20 +55,20 @@ class _MyAppState extends State<MyApp> {
               child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
                   SizedBox(
-                      width: 300,
-                      child: TextField(controller: commandCtrl, decoration: const InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)
+                    width: 300,
+                    child: TextField(controller: commandCtrl, decoration: const InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)
                   ),
-                  OutlinedButton(child: const Text("Run"), onPressed: _run)
+                  OutlinedButton(onPressed: _run, child: const Text("Run"))
                 ]))),
                 Expanded(child: ListView.builder(
-                    itemCount: model.scenariosCount + 1,
-                    itemBuilder: (context, i) {
-                      return i == model.scenariosCount
-                          ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        TrixIconTextButton(icon: const Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => model.addScenario())
-                      ],)
-                          : ScenarioWidget(i, runCtrl);
-                    }
+                  itemCount: model.scenariosCount + 1,
+                  itemBuilder: (context, i) {
+                    return i == model.scenariosCount
+                        ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      TrixIconTextButton(icon: const Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => model.addScenario())
+                    ],)
+                        : ScenarioWidget(i, runCtrl);
+                  }
                 ))
               ])
             );

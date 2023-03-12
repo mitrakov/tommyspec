@@ -1,3 +1,4 @@
+// ignore_for_file: use_key_in_widget_constructors
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tommyspec/common/roundbox.dart';
@@ -7,7 +8,7 @@ import 'package:tommyspec/model/model.dart';
 class GivenWidget extends StatefulWidget {
   final int idx;
 
-  GivenWidget(this.idx);
+  const GivenWidget(this.idx);
 
   @override
   State<GivenWidget> createState() => _GivenWidgetState();
@@ -24,9 +25,9 @@ class _GivenWidgetState extends State<GivenWidget> {
       builder: (context, _, model) {
         _updateTextFields(model);
         return TrixContainer(child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Text("Given"),
-          SizedBox(width: 200, child: TrixText(child: TextField(controller: pwdCtrl, decoration: InputDecoration(hintText: "Working directory")), onChanged: (s) => model.setWorkingDirectory(widget.idx, s))),
-          SizedBox(width: 200, child: TrixText(child: TextField(controller: envCtrl, decoration: InputDecoration(hintText: "Environment variables")), onChanged: (s) => model.setEnv(widget.idx, s))),
+          const Text("Given"),
+          SizedBox(width: 200, child: TrixText(child: TextField(controller: pwdCtrl, decoration: const InputDecoration(hintText: "Working directory")), onChanged: (s) => model.setWorkingDirectory(widget.idx, s))),
+          SizedBox(width: 200, child: TrixText(child: TextField(controller: envCtrl, decoration: const InputDecoration(hintText: "Environment variables")), onChanged: (s) => model.setEnv(widget.idx, s))),
         ]));
       }
     );

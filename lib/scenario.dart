@@ -1,4 +1,4 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: curly_braces_in_flow_control_structures, use_key_in_widget_constructors
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -49,11 +49,11 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
         fit: StackFit.passthrough,
         children: [
           Card(elevation: 5, child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _showGiven ? GivenWidget(i) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
-            _showWhen ? WhenWidget(i) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
-            _showThen ? ThenWidget(i, actualStatusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl) : TrixIconTextButton(icon: Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
+            _showGiven ? GivenWidget(i) : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
+            _showWhen ? WhenWidget(i) : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
+            _showThen ? ThenWidget(i, actualStatusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl) : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
           ])),
-          Align(alignment: Alignment.topRight, child: IconButton(icon: Icon(Icons.close), onPressed: _delete))
+          Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: _delete))
         ],
       ),
     );
