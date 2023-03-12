@@ -14,8 +14,8 @@ class WhenWidget extends StatefulWidget {
 }
 
 class _WhenWidgetState extends State<WhenWidget> {
-  final argsController = TextEditingController();
-  final stdinController = TextEditingController();
+  final argsCtrl = TextEditingController();
+  final stdinCtrl = TextEditingController();
   int _modelTs = 0;
 
   @override
@@ -25,9 +25,9 @@ class _WhenWidgetState extends State<WhenWidget> {
         _updateTextFields(model);
         return TrixContainer(child: Row(mainAxisSize: MainAxisSize.min, children: [
           Text("When"),
-          SizedBox(width: 200, child: TrixText(child: TextField(controller: argsController), onChanged: (s) => model.setArgs(widget.idx, s))),
+          SizedBox(width: 200, child: TrixText(child: TextField(controller: argsCtrl), onChanged: (s) => model.setArgs(widget.idx, s))),
           SizedBox(width: 50),
-          SizedBox(width: 400, child: TrixText(child: TextField(controller: stdinController), onChanged: (s) => model.setStdIn(widget.idx, s))),
+          SizedBox(width: 400, child: TrixText(child: TextField(controller: stdinCtrl), onChanged: (s) => model.setStdIn(widget.idx, s))),
         ]));
       }
     );
@@ -35,8 +35,8 @@ class _WhenWidgetState extends State<WhenWidget> {
 
   void _updateTextFields(TestModel model) {
     if (_modelTs != model.createdTs) {
-      argsController.text = model.getArgsAsString(widget.idx);
-      stdinController.text = model.getStdin(widget.idx);
+      argsCtrl.text = model.getArgsAsString(widget.idx);
+      stdinCtrl.text = model.getStdin(widget.idx);
       _modelTs = model.createdTs;
     }
   }

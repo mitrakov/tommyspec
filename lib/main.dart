@@ -21,7 +21,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final runCtrl = FunctionController<TestModel>();
-  final commandController = TextEditingController();
+  final commandCtrl = TextEditingController();
   TestModel _model = TestModel();
 
   @override
@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                 SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
                   SizedBox(
                       width: 300,
-                      child: TextField(controller: commandController, decoration: InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)
+                      child: TextField(controller: commandCtrl, decoration: InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)
                   ),
                   OutlinedButton(child: Text("Run"), onPressed: _run)
                 ]))),
@@ -96,7 +96,7 @@ class _MyAppState extends State<MyApp> {
       final model = TestModel.fromJson(json);
       setState(() {
         _model = model;
-        commandController.text = model.command;
+        commandCtrl.text = model.command;
       });
     }
   }

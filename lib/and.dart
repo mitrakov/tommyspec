@@ -45,8 +45,8 @@ class _AndWidgetState extends State<AndWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final j = widget.scenarioIdx;
-    final i = widget.idx;
+    final i = widget.scenarioIdx;
+    final j = widget.idx;
     return ScopedModelDescendant<TestModel>(
       builder: (context, _, model) {
         _updateTextFields(model);
@@ -64,14 +64,14 @@ class _AndWidgetState extends State<AndWidget> {
                     Expanded(child: TextField(controller: actualCtrl, maxLines: 1024)),
                     Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
                       Row(mainAxisSize: MainAxisSize.min, children: [
-                        Expanded(child: TrixDropdown(hintText: "Process", controller: processCtrl, options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(j, i, s==stdout))),
-                        Expanded(child: TrixDropdown(hintText: "As", controller: asCtrl, options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(j, i, s)))
+                        Expanded(child: TrixDropdown(hintText: "Process", controller: processCtrl, options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(i, j, s==stdout))),
+                        Expanded(child: TrixDropdown(hintText: "As", controller: asCtrl, options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(i, j, s)))
                       ]),
-                      TrixText(child: TextField(controller: queryCtrl), onChanged: (s) => model.setQuery(j, i, s)),
+                      TrixText(child: TextField(controller: queryCtrl), onChanged: (s) => model.setQuery(i, j, s)),
                       Row(mainAxisSize: MainAxisSize.min, children: [
                         const Text("Should be"),
-                        Expanded(child: TrixDropdown(hintText: "Op", controller: opCtrl, options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(j, i, s))),
-                        Expanded(child: TrixText(child: TextField(controller: expectedCtrl), onChanged: (s) => model.setExpectedValue(j, i, s))),
+                        Expanded(child: TrixDropdown(hintText: "Op", controller: opCtrl, options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(i, j, s))),
+                        Expanded(child: TrixText(child: TextField(controller: expectedCtrl), onChanged: (s) => model.setExpectedValue(i, j, s))),
                         _isOk(model) ? const Icon(Icons.done_outline, color: Colors.green) : const Icon(Icons.do_not_disturb, color: Colors.red),
                       ])
                     ]))
@@ -88,13 +88,13 @@ class _AndWidgetState extends State<AndWidget> {
 
   void _updateTextFields(TestModel model) {
     if (_modelTs != model.createdTs) {
-      final j = widget.scenarioIdx;
-      final i = widget.idx;
-      processCtrl.value = model.getStdOutOrErr(j, i) ? stdout : stderr;
-      asCtrl.value = model.getAs(j, i);
-      queryCtrl.text = model.getQuery(j, i);
-      opCtrl.value = model.getOperation(j, i);
-      expectedCtrl.text = model.getExpectedValue(j, i);
+      final i = widget.scenarioIdx;
+      final j = widget.idx;
+      processCtrl.value = model.getStdOutOrErr(i, j) ? stdout : stderr;
+      asCtrl.value = model.getAs(i, j);
+      queryCtrl.text = model.getQuery(i, j);
+      opCtrl.value = model.getOperation(i, j);
+      expectedCtrl.text = model.getExpectedValue(i, j);
       _modelTs = model.createdTs;
     }
   }
@@ -106,14 +106,14 @@ class _AndWidgetState extends State<AndWidget> {
   }
 
   void _process(TestModel model) {
-    final j = widget.scenarioIdx;
-    final i = widget.idx;
-    final s = model.getStdOutOrErr(j, i) ? widget.stdoutCtrl.text.trim() : widget.stderrCtrl.text.trim();
-    final query = model.getQuery(j, i);
+    final i = widget.scenarioIdx;
+    final j = widget.idx;
+    final s = model.getStdOutOrErr(i, j) ? widget.stdoutCtrl.text.trim() : widget.stderrCtrl.text.trim();
+    final query = model.getQuery(i, j);
     if (s.isEmpty || query.isEmpty) return;
 
     try {
-      switch (model.getAs(j, i)) {
+      switch (model.getAs(i, j)) {
         case csvText:
           actualCtrl.text = TextProcessor.process(query, s);
           break;
@@ -134,12 +134,12 @@ class _AndWidgetState extends State<AndWidget> {
 
   bool _isOk(TestModel model) {
     final actual = actualCtrl.text.trim();
-    final j = widget.scenarioIdx;
-    final i = widget.idx;
-    final expected = model.getExpectedValue(j, i);
+    final i = widget.scenarioIdx;
+    final j = widget.idx;
+    final expected = model.getExpectedValue(i, j);
     if (expected.isEmpty) return false;
 
-    switch (model.getOperation(j, i)) {
+    switch (model.getOperation(i, j)) {
       case eq: return actual == expected;
       case gt:
         final x = double.tryParse(actual);
