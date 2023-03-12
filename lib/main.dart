@@ -31,20 +31,20 @@ class _MyAppState extends State<MyApp> {
       child: PlatformMenuBar(
         menus: [
           PlatformMenu(label: "Hey-Hey", menus: [
-            PlatformMenuItem(label: "Quit", shortcut: const SingleActivator(LogicalKeyboardKey.keyQ, meta: true), onSelected: () => exit(0))
+            PlatformMenuItem(label: "Quit", shortcut: const SingleActivator(LogicalKeyboardKey.keyW, meta: true), onSelected: () => exit(0))
           ]),
           PlatformMenu(label: "File", menus: [
-            PlatformMenuItem(label: "Open", shortcut: SingleActivator(LogicalKeyboardKey.keyO, meta: true), onSelected: _openFile),
-            PlatformMenuItem(label: "Save", shortcut: SingleActivator(LogicalKeyboardKey.keyS, meta: true), onSelected: _saveFile)
+            PlatformMenuItem(label: "Open", shortcut: const SingleActivator(LogicalKeyboardKey.keyO, meta: true), onSelected: _openFile),
+            PlatformMenuItem(label: "Save", shortcut: const SingleActivator(LogicalKeyboardKey.keyS, meta: true), onSelected: _saveFile)
           ]),
           PlatformMenu(label: "Build", menus: [
-            PlatformMenuItem(label: "Run", shortcut: SingleActivator(LogicalKeyboardKey.enter), onSelected: _run),
+            PlatformMenuItem(label: "Run", shortcut: const SingleActivator(LogicalKeyboardKey.enter), onSelected: _run),
           ])
         ],
         child: Shortcuts(
           shortcuts: {
             // even though we have "Run" in main menu, we still need this shortcut, because otherwise in Text fields it will require to press ENTER twice
-            SingleActivator(LogicalKeyboardKey.enter): RunIntent()
+            const SingleActivator(LogicalKeyboardKey.enter): RunIntent()
           },
           // even though we have "_model" member available, we still have to use ScopedModelDescendant to update children widgets
           child: ScopedModelDescendant<TestModel>(builder: (context, _, model) {
@@ -56,16 +56,16 @@ class _MyAppState extends State<MyApp> {
                 SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
                   SizedBox(
                       width: 300,
-                      child: TextField(controller: commandCtrl, decoration: InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)
+                      child: TextField(controller: commandCtrl, decoration: const InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)
                   ),
-                  OutlinedButton(child: Text("Run"), onPressed: _run)
+                  OutlinedButton(child: const Text("Run"), onPressed: _run)
                 ]))),
                 Expanded(child: ListView.builder(
                     itemCount: model.scenariosCount + 1,
                     itemBuilder: (context, i) {
                       return i == model.scenariosCount
                           ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        TrixIconTextButton(icon: Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => model.addScenario())
+                        TrixIconTextButton(icon: const Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => model.addScenario())
                       ],)
                           : ScenarioWidget(i, runCtrl);
                     }
