@@ -36,13 +36,18 @@ class _MyAppState extends State<MyApp> {
           PlatformMenu(label: "File", menus: [
             PlatformMenuItem(label: "Open", shortcut: SingleActivator(LogicalKeyboardKey.keyO, meta: true), onSelected: _openFile),
             PlatformMenuItem(label: "Save", shortcut: SingleActivator(LogicalKeyboardKey.keyS, meta: true), onSelected: _saveFile)
+          ]),
+          PlatformMenu(label: "Build", menus: [
+            PlatformMenuItem(label: "Run", shortcut: SingleActivator(LogicalKeyboardKey.enter), onSelected: _run),
           ])
         ],
         child: Shortcuts(
           shortcuts: {
-            SingleActivator(LogicalKeyboardKey.enter): RunIntent() // move to menu?
+            // even though we have "Run" in main menu, we still need this shortcut, because otherwise in Text fields it will require to press ENTER twice
+            SingleActivator(LogicalKeyboardKey.enter): RunIntent()
           },
-          child: ScopedModelDescendant<TestModel>(builder: (context, _, model) { // don't use "_model" directly; we need this to update the widget tree
+          // even though we have "_model" member available, we still have to use ScopedModelDescendant to update children widgets
+          child: ScopedModelDescendant<TestModel>(builder: (context, _, model) {
             return Actions(
               actions: {
                 RunIntent: CallbackAction(onInvoke: (_) => _run())
@@ -74,7 +79,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _run() {
-    setState(() { // we need this to update children; TODO really?
+    setState(() { // we need this to update children properly
       runCtrl.run(_model);
     });
   }
