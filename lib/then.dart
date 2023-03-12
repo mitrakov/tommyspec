@@ -6,7 +6,7 @@ import 'package:tommyspec/common/expand.dart';
 import 'package:tommyspec/common/icontextbutton.dart';
 import 'package:tommyspec/model/model.dart';
 
-class ThenWidget extends StatefulWidget { // TODO Stateless?
+class ThenWidget extends StatefulWidget {
   final int idx;
   final TextEditingController stdoutCtrl;
   final TextEditingController stderrCtrl;
@@ -20,6 +20,7 @@ class ThenWidget extends StatefulWidget { // TODO Stateless?
 
 class _ThenWidgetState extends State<ThenWidget> {
   final TextEditingController expectedStatusCtrl = TextEditingController();
+  int _modelTs = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class _ThenWidgetState extends State<ThenWidget> {
     return ScopedModelDescendant<TestModel>(
       builder: (context, _, model) {
         final andsCount = model.getAndsCount(i);
-        updateTextFields(model);
+        _updateTextFields(model);
         return SizedBox(height: 430+50.0*andsCount, child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
           Row(mainAxisSize: MainAxisSize.min, children: [
             Text("Then"),
@@ -58,10 +59,10 @@ class _ThenWidgetState extends State<ThenWidget> {
     );
   }
 
-  void updateTextFields(TestModel model) {
-    if (expectedStatusCtrl.text != model.getExpectedStatus(widget.idx)) {
-      // it's possible when we load a new model with ⌘+O
+  void _updateTextFields(TestModel model) {
+    if (_modelTs != model.createdTs) {
       expectedStatusCtrl.text = model.getExpectedStatus(widget.idx);
+      _modelTs = model.createdTs;
     }
   }
 

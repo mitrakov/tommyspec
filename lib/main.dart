@@ -26,7 +26,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    commandController.text = _model.command;
     return ScopedModel<TestModel>(
       model: _model,
       child: PlatformMenuBar(
@@ -97,6 +96,7 @@ class _MyAppState extends State<MyApp> {
       final model = TestModel.fromJson(json);
       setState(() {
         _model = model;
+        commandController.text = model.command;
       });
     }
   }

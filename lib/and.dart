@@ -40,6 +40,7 @@ class _AndWidgetState extends State<AndWidget> {
   final queryCtrl = TextEditingController();
   final opCtrl = ValueNotifier(eq);
   final expectedCtrl = TextEditingController();
+  int _modelTs = 0;
   bool _isDeleted = false;
 
   @override
@@ -48,11 +49,7 @@ class _AndWidgetState extends State<AndWidget> {
     final i = widget.idx;
     return ScopedModelDescendant<TestModel>(
       builder: (context, _, model) {
-        processCtrl.value = model.getStdOutOrErr(j, i) ? stdout : stderr;
-        asCtrl.value = model.getAs(j, i);
-        queryCtrl.text = model.getQuery(j, i);
-        opCtrl.value = model.getOperation(j, i);
-        expectedCtrl.text = model.getExpectedValue(j, i);
+        _updateTextFields(model);
         _process(model);
         return Visibility(
           visible: !_isDeleted,
@@ -87,6 +84,19 @@ class _AndWidgetState extends State<AndWidget> {
         );
       }
     );
+  }
+
+  void _updateTextFields(TestModel model) {
+    if (_modelTs != model.createdTs) {
+      final j = widget.scenarioIdx;
+      final i = widget.idx;
+      processCtrl.value = model.getStdOutOrErr(j, i) ? stdout : stderr;
+      asCtrl.value = model.getAs(j, i);
+      queryCtrl.text = model.getQuery(j, i);
+      opCtrl.value = model.getOperation(j, i);
+      expectedCtrl.text = model.getExpectedValue(j, i);
+      _modelTs = model.createdTs;
+    }
   }
 
   void _delete() {

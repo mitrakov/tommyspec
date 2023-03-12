@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:scoped_model/scoped_model.dart';
 part 'model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class TestModel extends Model {
+  final int createdTs = DateTime.now().millisecondsSinceEpoch; // needed for ⌘+O functionality to establish current timestamp
   String _command = "";
   List<ScenarioModel> _scenarios = [];
 
