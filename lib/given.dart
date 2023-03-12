@@ -24,11 +24,25 @@ class _GivenWidgetState extends State<GivenWidget> {
     return ScopedModelDescendant<TestModel>(
       builder: (context, _, model) {
         _updateTextFields(model);
-        return TrixContainer(child: Row(mainAxisSize: MainAxisSize.min, children: [
-          const Text("Given"),
-          SizedBox(width: 200, child: TrixText(child: TextField(controller: pwdCtrl, decoration: const InputDecoration(hintText: "Working directory")), onChanged: (s) => model.setWorkingDirectory(widget.idx, s))),
-          SizedBox(width: 200, child: TrixText(child: TextField(controller: envCtrl, decoration: const InputDecoration(hintText: "Environment variables")), onChanged: (s) => model.setEnv(widget.idx, s))),
-        ]));
+        return TrixContainer(
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            const Text("Given"),
+            SizedBox(
+              width: 200,
+              child: TrixText(
+                child: TextField(controller: pwdCtrl, decoration: const InputDecoration(hintText: "Working directory")),
+                onChanged: (s) => model.setWorkingDirectory(widget.idx, s)
+              )
+            ),
+            SizedBox(
+              width: 200,
+              child: TrixText(
+                child: TextField(controller: envCtrl, decoration: const InputDecoration(hintText: "Environment variables")),
+                onChanged: (s) => model.setEnv(widget.idx, s)
+              )
+            ),
+          ])
+        );
       }
     );
   }

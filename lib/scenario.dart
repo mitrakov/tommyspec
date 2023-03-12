@@ -32,9 +32,9 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   @override
   void initState() {
     super.initState();
-    widget.runController.register(runProcess);
     final model = ScopedModel.of<TestModel>(context);
     final i = widget.idx;
+    widget.runController.register(runProcess);
     _showGiven = model.getPwd(i) != null && model.getEnv(i) != null;
     _showWhen = model.getArgs(i).isNotEmpty;
     _showThen = model.getAndsCount(i) > 0;
@@ -48,14 +48,23 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
       child: Stack(
         fit: StackFit.passthrough,
         children: [
-          Card(elevation: 5, child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _showGiven ? GivenWidget(i) : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
-            _showWhen ? WhenWidget(i) : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
-            _showThen ? ThenWidget(i, actualStatusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl) : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
-          ])),
+          Card(
+            elevation: 5,
+            child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              _showGiven
+                ? GivenWidget(i)
+                : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
+              _showWhen
+                ? WhenWidget(i)
+                : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
+              _showThen
+                ? ThenWidget(i, actualStatusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl)
+                : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
+            ])
+          ),
           Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: _delete))
-        ],
-      ),
+        ]
+      )
     );
   }
 

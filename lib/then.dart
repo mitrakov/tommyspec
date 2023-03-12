@@ -28,34 +28,46 @@ class _ThenWidgetState extends State<ThenWidget> {
     final i = widget.idx;
     return ScopedModelDescendant<TestModel>(
       builder: (context, _, model) {
-        final andsCount = model.getAndsCount(i);
         _updateTextFields(model);
-        return SizedBox(height: 430+50.0*andsCount, child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-          Row(mainAxisSize: MainAxisSize.min, children: [
-            const Text("Then"),
-            const Text("Status code"),
-            Expanded(child: TextField(controller: widget.actualStatusCtrl, readOnly: true,)),
-            const Text("should be"),
-            Expanded(child: TextField(controller: expectedStatusCtrl, onChanged: (s) {
-              return model.setExpectedStatus(i, s);
-            },)),
-            _isStatusOk(model)
-              ? const Icon(Icons.done_outline, color: Colors.green)
-              : const Icon(Icons.do_not_disturb_alt_rounded, color: Colors.red)
-          ],),
-          TrixExpandPanel(headerWidget: const Text("Output"), child: Container(height: 200, color: Colors.grey, child: SplitView(viewMode: SplitViewMode.Horizontal, children: [
-            TextField(controller: widget.stdoutCtrl, maxLines: 4096),
-            TextField(controller: widget.stderrCtrl, maxLines: 4096),
-          ]))),
-          Expanded(child: ListView.builder(
-            itemCount: andsCount + 1,
-            itemBuilder: (context, j) {
-              return j == andsCount
-                ? TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "And", onTap: () => _addAndItem(model))
-                : AndWidget(i, j, stdoutCtrl: widget.stdoutCtrl, stderrCtrl: widget.stderrCtrl);
-            }
-          ))
-        ]));
+        final andsCount = model.getAndsCount(i);
+        return SizedBox(
+          height: 430 + 50.0*andsCount,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(mainAxisSize: MainAxisSize.min, children: [
+                const Text("Then"),
+                const Text("Status code"),
+                Expanded(child: TextField(controller: widget.actualStatusCtrl, readOnly: true,)),
+                const Text("should be"),
+                Expanded(child: TextField(controller: expectedStatusCtrl, onChanged: (s) => model.setExpectedStatus(i, s))),
+                _isStatusOk(model)
+                  ? const Icon(Icons.done_outline, color: Colors.green)
+                  : const Icon(Icons.do_not_disturb_alt_rounded, color: Colors.red)
+              ]),
+              TrixExpandPanel(
+                headerWidget: const Text("Output"),
+                child: Container(
+                  height: 200,
+                  color: Colors.grey,
+                  child: SplitView(viewMode: SplitViewMode.Horizontal, children: [
+                    TextField(controller: widget.stdoutCtrl, maxLines: 4096),
+                    TextField(controller: widget.stderrCtrl, maxLines: 4096)
+                  ])
+                )
+              ),
+              Expanded(child: ListView.builder(
+                itemCount: andsCount + 1,
+                itemBuilder: (context, j) {
+                  return j == andsCount
+                    ? TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "And", onTap: () => _addAndItem(model))
+                    : AndWidget(i, j, stdoutCtrl: widget.stdoutCtrl, stderrCtrl: widget.stderrCtrl);
+                }
+              ))
+            ]
+          )
+        );
       }
     );
   }

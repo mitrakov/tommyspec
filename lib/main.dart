@@ -64,10 +64,10 @@ class _MyAppState extends State<MyApp> {
                   itemCount: model.scenariosCount + 1,
                   itemBuilder: (context, i) {
                     return i == model.scenariosCount
-                        ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      TrixIconTextButton(icon: const Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => model.addScenario())
-                    ],)
-                        : ScenarioWidget(i, runCtrl);
+                      ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          TrixIconTextButton(icon: const Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => model.addScenario())
+                        ])
+                      : ScenarioWidget(i, runCtrl);
                   }
                 ))
               ])

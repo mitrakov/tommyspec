@@ -66,23 +66,33 @@ class _AndWidgetState extends State<AndWidget> {
                     Expanded(child: TextField(controller: actualCtrl, maxLines: 1024)),
                     Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
                       Row(mainAxisSize: MainAxisSize.min, children: [
-                        Expanded(child: TrixDropdown(hintText: "Process", controller: processCtrl, options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(i, j, s==stdout))),
-                        Expanded(child: TrixDropdown(hintText: "As", controller: asCtrl, options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(i, j, s)))
+                        Expanded(
+                          child: TrixDropdown(hintText: "Process", controller: processCtrl, options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(i, j, s==stdout))
+                        ),
+                        Expanded(
+                          child: TrixDropdown(hintText: "As", controller: asCtrl, options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(i, j, s))
+                        )
                       ]),
                       TrixText(child: TextField(controller: queryCtrl), onChanged: (s) => model.setQuery(i, j, s)),
                       Row(mainAxisSize: MainAxisSize.min, children: [
                         const Text("Should be"),
-                        Expanded(child: TrixDropdown(hintText: "Op", controller: opCtrl, options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(i, j, s))),
-                        Expanded(child: TrixText(child: TextField(controller: expectedCtrl), onChanged: (s) => model.setExpectedValue(i, j, s))),
-                        _isOk(model) ? const Icon(Icons.done_outline, color: Colors.green) : const Icon(Icons.do_not_disturb, color: Colors.red),
+                        Expanded(
+                          child: TrixDropdown(hintText: "Op", controller: opCtrl, options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(i, j, s))
+                        ),
+                        Expanded(
+                          child: TrixText(child: TextField(controller: expectedCtrl), onChanged: (s) => model.setExpectedValue(i, j, s))
+                        ),
+                        _isOk(model)
+                          ? const Icon(Icons.done_outline, color: Colors.green)
+                          : const Icon(Icons.do_not_disturb, color: Colors.red),
                       ])
                     ]))
                   ])
                 )
               ),
-              Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: _delete),)
-            ],
-          ),
+              Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: _delete))
+            ]
+          )
         );
       }
     );
@@ -129,15 +139,15 @@ class _AndWidgetState extends State<AndWidget> {
           actualCtrl.text = RegExp(query).firstMatch(s)?.group(0) ?? "";
           break;
       }
-    } catch(e) {
+    } catch (e) {
       actualCtrl.text = e.toString();
     }
   }
 
   bool _isOk(TestModel model) {
-    final actual = actualCtrl.text.trim();
     final i = widget.scenarioIdx;
     final j = widget.idx;
+    final actual = actualCtrl.text.trim();
     final expected = model.getExpectedValue(i, j);
     if (expected.isEmpty) return false;
 
