@@ -5,6 +5,7 @@ import 'package:split_view/split_view.dart';
 import 'package:tommyspec/and.dart';
 import 'package:tommyspec/common/expand.dart';
 import 'package:tommyspec/common/icontextbutton.dart';
+import 'package:tommyspec/common/roundbox.dart';
 import 'package:tommyspec/model/model.dart';
 
 class ThenWidget extends StatefulWidget {
@@ -36,16 +37,18 @@ class _ThenWidgetState extends State<ThenWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(mainAxisSize: MainAxisSize.min, children: [
-                const Text("Then"),
-                const Text("Status code"),
-                Expanded(child: TextField(controller: widget.actualStatusCtrl, readOnly: true,)),
-                const Text("should be"),
-                Expanded(child: TextField(controller: expectedStatusCtrl, onChanged: (s) => model.setExpectedStatus(i, s))),
-                _isStatusOk(model)
-                  ? const Icon(Icons.done_outline, color: Colors.green)
-                  : const Icon(Icons.do_not_disturb_alt_rounded, color: Colors.red)
-              ]),
+              TrixContainer(
+                child: Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  const Text("Then", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
+                  const Text("Status code:", style: TextStyle(fontWeight: FontWeight.w500)),
+                  SizedBox(width: 80, child: TextField(controller: widget.actualStatusCtrl, textAlign: TextAlign.center, readOnly: true)),
+                  const Text("should be:", style: TextStyle(fontWeight: FontWeight.w500)),
+                  SizedBox(width: 80, child: TextField(controller: expectedStatusCtrl, textAlign: TextAlign.center, onChanged: (s) => model.setExpectedStatus(i, s))),
+                  _isStatusOk(model)
+                    ? const Icon(Icons.done_outline, color: Colors.green, size: 40)
+                    : const Icon(Icons.do_not_disturb_alt_rounded, color: Colors.red, size: 40)
+                ])
+              ),
               TrixExpandPanel(
                 headerWidget: const Text("Output"),
                 child: Container(

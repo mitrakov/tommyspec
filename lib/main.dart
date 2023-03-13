@@ -53,13 +53,13 @@ class _MyAppState extends State<MyApp> {
                 RunIntent: CallbackAction(onInvoke: (_) => _run())
               },
               child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                SizedBox(height: 50, child: Container(color: Colors.transparent, child: Row(children: [
-                  SizedBox(
-                    width: 300,
-                    child: TextField(controller: commandCtrl, decoration: const InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)
-                  ),
-                  OutlinedButton(onPressed: _run, child: const Text("Run"))
-                ]))),
+                Row(children: [
+                  const SizedBox(width: 10),
+                  Expanded(child: TextField(controller: commandCtrl, decoration: const InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)),
+                  const Expanded(child: SizedBox()),
+                  ElevatedButton(onPressed: _run, child: const Text("Run", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700))),
+                  const SizedBox(width: 4),
+                ]),
                 Expanded(child: ListView.builder(
                   itemCount: model.scenariosCount + 1,
                   itemBuilder: (context, i) {

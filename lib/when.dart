@@ -25,10 +25,18 @@ class _WhenWidgetState extends State<WhenWidget> {
       builder: (context, _, model) {
         _updateTextFields(model);
         return TrixContainer(child: Row(mainAxisSize: MainAxisSize.min, children: [
-          const Text("When"),
-          SizedBox(width: 200, child: TrixText(child: TextField(controller: argsCtrl), onChanged: (s) => model.setArgs(widget.idx, s))),
+          const Text("When", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
           const SizedBox(width: 50),
-          SizedBox(width: 400, child: TrixText(child: TextField(controller: stdinCtrl), onChanged: (s) => model.setStdIn(widget.idx, s))),
+          Expanded(child: TrixText(
+            child: TextField(controller: argsCtrl, decoration: const InputDecoration(hintText: "Command Line Arguments")),
+            onChanged: (s) => model.setArgs(widget.idx, s)
+          )),
+          const SizedBox(width: 50),
+          Expanded(child: TrixText(
+            child: TextField(controller: stdinCtrl, decoration: const InputDecoration(hintText: "Std In"),),
+            onChanged: (s) => model.setStdIn(widget.idx, s)
+          )),
+          const SizedBox(width: 50),
         ]));
       }
     );
