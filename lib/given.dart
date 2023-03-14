@@ -29,12 +29,12 @@ class _GivenWidgetState extends State<GivenWidget> {
             const Text("Given", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
             const SizedBox(width: 50),
             Expanded(child: TrixText(
-              child: TextField(controller: pwdCtrl, decoration: const InputDecoration(hintText: "Working directory")),
+              child: TextField(controller: pwdCtrl, decoration: const InputDecoration(labelText: "Working directory")),
               onChanged: (s) => model.setWorkingDirectory(widget.idx, s)
             )),
             const SizedBox(width: 50),
             Expanded(child: TrixText(
-              child: TextField(controller: envCtrl, decoration: const InputDecoration(hintText: "Environment variables")),
+              child: TextField(controller: envCtrl, decoration: const InputDecoration(labelText: "Environment variables")),
               onChanged: (s) => model.setEnv(widget.idx, s)
             )),
             const SizedBox(width: 50),

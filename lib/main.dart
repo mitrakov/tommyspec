@@ -10,6 +10,9 @@ import 'package:tommyspec/model/model.dart';
 import 'package:tommyspec/scenario.dart';
 import 'package:tommyspec/utils/fnctrl.dart';
 
+// bugs:
+// combobox
+// remove AND and then Load Model with CMD+O
 void main() {
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Scaffold(body: MyApp())));
 }

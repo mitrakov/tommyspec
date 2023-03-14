@@ -50,13 +50,12 @@ class _ThenWidgetState extends State<ThenWidget> {
                 ])
               ),
               TrixExpandPanel(
-                headerWidget: const Text("Output"),
-                child: Container(
+                headerWidget: const Padding(padding: EdgeInsets.only(top: 12), child: Text("Output", textAlign: TextAlign.center)),
+                child: SizedBox(
                   height: 200,
-                  color: Colors.grey,
-                  child: SplitView(viewMode: SplitViewMode.Horizontal, children: [
-                    TextField(controller: widget.stdoutCtrl, maxLines: 4096),
-                    TextField(controller: widget.stderrCtrl, maxLines: 4096)
+                  child: SplitView(viewMode: SplitViewMode.Horizontal, gripSize: 5, children: [
+                    TextField(controller: widget.stdoutCtrl, maxLines: 4096, readOnly: true, decoration: const InputDecoration(labelText: "Std Out")),
+                    TextField(controller: widget.stderrCtrl, maxLines: 4096, readOnly: true, decoration: const InputDecoration(labelText: "Std Err"), style: TextStyle(color: Colors.red),)
                   ])
                 )
               ),

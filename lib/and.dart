@@ -6,6 +6,7 @@ import 'package:json_path/json_path.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tommyspec/common/dropdown.dart';
 import 'package:tommyspec/common/expand.dart';
+import 'package:tommyspec/common/roundbox.dart';
 import 'package:tommyspec/common/textbox.dart';
 import 'package:tommyspec/model/model.dart';
 import 'package:tommyspec/utils/txt_processor.dart';
@@ -58,36 +59,46 @@ class _AndWidgetState extends State<AndWidget> {
           child: Stack(
             fit: StackFit.passthrough,
             children: [
-              TrixExpandPanel(
-                headerWidget: const Text("AND"),
-                child: SizedBox(
-                  height: 145,
-                  child: Row(children: [
-                    Expanded(child: TextField(controller: actualCtrl, maxLines: 1024)),
-                    Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      Row(mainAxisSize: MainAxisSize.min, children: [
-                        Expanded(
-                          child: TrixDropdown(hintText: "Process", controller: processCtrl, options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(i, j, s==stdout))
-                        ),
-                        Expanded(
-                          child: TrixDropdown(hintText: "As", controller: asCtrl, options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(i, j, s))
-                        )
-                      ]),
-                      TrixText(child: TextField(controller: queryCtrl), onChanged: (s) => model.setQuery(i, j, s)),
-                      Row(mainAxisSize: MainAxisSize.min, children: [
-                        const Text("Should be"),
-                        Expanded(
-                          child: TrixDropdown(hintText: "Op", controller: opCtrl, options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(i, j, s))
-                        ),
-                        Expanded(
-                          child: TrixText(child: TextField(controller: expectedCtrl), onChanged: (s) => model.setExpectedValue(i, j, s))
-                        ),
-                        _isOk(model)
-                          ? const Icon(Icons.done_outline, color: Colors.green)
-                          : const Icon(Icons.do_not_disturb, color: Colors.red),
-                      ])
-                    ]))
-                  ])
+              TrixContainer(
+                child: TrixExpandPanel(
+                  headerWidget: const Padding(padding: EdgeInsets.only(top: 12), child: Text("And", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700))),
+                  colour: const Color(0xFFFFFEFE),
+                  child: SizedBox(
+                    height: 165,
+                    child: Row(children: [
+                      Expanded(child: TrixContainer(child: TextField(controller: actualCtrl, readOnly: true, maxLines: 1024))),
+                      const SizedBox(width: 8),
+                      Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        Row(mainAxisSize: MainAxisSize.min, children: [
+                          Expanded(
+                            child: TrixDropdown(hintText: "Process", controller: processCtrl, options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(i, j, s==stdout))
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: TrixDropdown(hintText: "As", controller: asCtrl, options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(i, j, s))
+                          )
+                        ]),
+                        TrixText(child: TextField(controller: queryCtrl, decoration: const InputDecoration(labelText: "Query")), onChanged: (s) => model.setQuery(i, j, s)),
+                        const SizedBox(height: 6),
+                        Row(mainAxisSize: MainAxisSize.min, children: [
+                          const Text("should be", style: TextStyle(fontWeight: FontWeight.w500)),
+                          const SizedBox(width: 8),
+                          SizedBox(
+                            width: 50,
+                            child: TrixDropdown(hintText: "Op", controller: opCtrl, options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(i, j, s))
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TrixText(child: TextField(controller: expectedCtrl), onChanged: (s) => model.setExpectedValue(i, j, s))
+                          ),
+                          const SizedBox(width: 8),
+                          _isOk(model)
+                            ? const Icon(Icons.done_outline, color: Colors.green)
+                            : const Icon(Icons.do_not_disturb, color: Colors.red),
+                        ])
+                      ]))
+                    ])
+                  )
                 )
               ),
               Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: _delete))

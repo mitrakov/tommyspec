@@ -28,12 +28,12 @@ class _WhenWidgetState extends State<WhenWidget> {
           const Text("When", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
           const SizedBox(width: 50),
           Expanded(child: TrixText(
-            child: TextField(controller: argsCtrl, decoration: const InputDecoration(hintText: "Command Line Arguments")),
+            child: TextField(controller: argsCtrl, decoration: const InputDecoration(labelText: "Command Line Arguments")),
             onChanged: (s) => model.setArgs(widget.idx, s)
           )),
           const SizedBox(width: 50),
           Expanded(child: TrixText(
-            child: TextField(controller: stdinCtrl, decoration: const InputDecoration(hintText: "Std In"),),
+            child: TextField(controller: stdinCtrl, decoration: const InputDecoration(labelText: "Std In")),
             onChanged: (s) => model.setStdIn(widget.idx, s)
           )),
           const SizedBox(width: 50),
