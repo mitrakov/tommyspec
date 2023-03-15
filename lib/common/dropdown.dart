@@ -6,34 +6,25 @@ class TrixDropdown<T> extends StatefulWidget {
   final String Function(T) getLabel;
   final void Function(T) onChanged;
   final T? value;
-  final ValueNotifier<T>? controller;
+  final ValueNotifier<T?> ctrl;
 
-  const TrixDropdown({
+  TrixDropdown({
     super.key,
     required this.hintText,
     required this.options,
     required this.getLabel,
     required this.onChanged,
     this.value,
-    this.controller
-  });
+    ValueNotifier<T?>? controller
+  }): ctrl = controller ?? ValueNotifier(value);
 
   @override
   State<TrixDropdown<T>> createState() => _TrixDropdownState<T>();
 }
 
 class _TrixDropdownState<T> extends State<TrixDropdown<T>> {
-  late T? value;
-
-  @override
-  void initState() {
-    super.initState();
-    value = widget.value;
-  }
-
   @override
   Widget build(BuildContext context) {
-    value = widget.controller?.value ?? value;
     return FormField<T>(
       builder: (FormFieldState<T> state) {
         return InputDecorator(
@@ -43,15 +34,15 @@ class _TrixDropdownState<T> extends State<TrixDropdown<T>> {
             border:
             OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
           ),
-          isEmpty: value == null || value == '',
+          isEmpty: widget.ctrl.value == null || widget.ctrl.value == '',
           child: DropdownButtonHideUnderline(
             child: DropdownButton<T>(
-              value: value,
+              value: widget.ctrl.value,
               isDense: true,
               onChanged: (t) {
                 widget.onChanged(t as T);
                 setState(() {
-                  value = t;
+                  widget.ctrl.value = t;
                 });
               },
               items: widget.options.map((T value) {
