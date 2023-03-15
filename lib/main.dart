@@ -47,13 +47,15 @@ class _MyAppState extends State<MyApp> {
         child: Shortcuts(
           shortcuts: {
             // even though we have "Run" in main menu, we still need this shortcut, because otherwise in Text fields it will require to press ENTER twice
-            const SingleActivator(LogicalKeyboardKey.enter): RunIntent()
+            const SingleActivator(LogicalKeyboardKey.enter): RunIntent(),
+            const SingleActivator(LogicalKeyboardKey.keyD, meta: true): DebugIntent(),
           },
           // even though we have "_model" member available, we still have to use ScopedModelDescendant to update children widgets
           child: ScopedModelDescendant<TestModel>(builder: (context, _, model) {
             return Actions(
               actions: {
-                RunIntent: CallbackAction(onInvoke: (_) => _run())
+                RunIntent: CallbackAction(onInvoke: (_) => _run()),
+                DebugIntent: CallbackAction(onInvoke: (_) => print(model.toJson())),
               },
               child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: [
@@ -111,3 +113,4 @@ class _MyAppState extends State<MyApp> {
 }
 
 class RunIntent extends Intent {}
+class DebugIntent extends Intent {}
