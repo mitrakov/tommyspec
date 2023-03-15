@@ -5,7 +5,6 @@ class TrixDropdown<T> extends StatefulWidget {
   final List<T> options;
   final String Function(T) getLabel;
   final void Function(T) onChanged;
-  final T? value;
   final ValueNotifier<T?> ctrl;
 
   TrixDropdown({
@@ -14,7 +13,7 @@ class TrixDropdown<T> extends StatefulWidget {
     required this.options,
     required this.getLabel,
     required this.onChanged,
-    this.value,
+    T? value,
     ValueNotifier<T?>? controller
   }): ctrl = controller ?? ValueNotifier(value);
 
