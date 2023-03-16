@@ -90,8 +90,8 @@ class _AndWidgetState extends State<AndWidget> {
                         ),
                         const SizedBox(width: 8),
                         _isOk(model)
-                          ? const Icon(Icons.done_outline, color: Colors.green)
-                          : const Icon(Icons.do_not_disturb, color: Colors.red),
+                          ? const Icon(Icons.done_outline, color: Colors.green, size: 40)
+                          : const Icon(Icons.do_not_disturb, color: Colors.red, size: 40),
                       ])
                     ]))
                   ])
