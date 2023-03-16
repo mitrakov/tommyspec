@@ -44,7 +44,6 @@ class _AndWidgetState extends State<AndWidget> {
   final opCtrl = ValueNotifier(eq);
   final expectedCtrl = TextEditingController();
   int _modelTs = 0;
-  bool _isDeleted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,56 +53,53 @@ class _AndWidgetState extends State<AndWidget> {
       builder: (context, _, model) {
         _updateTextFields(model);
         _process(model);
-        return Visibility(
-          visible: !_isDeleted,
-          child: Stack(
-            fit: StackFit.passthrough,
-            children: [
-              TrixContainer(
-                child: TrixExpandPanel(
-                  headerWidget: const Padding(padding: EdgeInsets.only(top: 12), child: Text("And", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700))),
-                  colour: const Color(0xFFFFFEFE),
-                  child: SizedBox(
-                    height: 165,
-                    child: Row(children: [
-                      Expanded(child: TrixContainer(child: TextField(controller: actualCtrl, readOnly: true, maxLines: 1024))),
-                      const SizedBox(width: 8),
-                      Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
-                        Row(mainAxisSize: MainAxisSize.min, children: [
-                          Expanded(
-                            child: TrixDropdown(hintText: "Process", controller: processCtrl, options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(i, j, s==stdout))
-                          ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: TrixDropdown(hintText: "As", controller: asCtrl, options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(i, j, s))
-                          )
-                        ]),
-                        TrixText(child: TextField(controller: queryCtrl, decoration: const InputDecoration(labelText: "Query")), onChanged: (s) => model.setQuery(i, j, s)),
-                        const SizedBox(height: 6),
-                        Row(mainAxisSize: MainAxisSize.min, children: [
-                          const Text("should be", style: TextStyle(fontWeight: FontWeight.w500)),
-                          const SizedBox(width: 8),
-                          SizedBox(
-                            width: 50,
-                            child: TrixDropdown(hintText: "Op", controller: opCtrl, options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(i, j, s))
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: TrixText(child: TextField(controller: expectedCtrl), onChanged: (s) => model.setExpectedValue(i, j, s))
-                          ),
-                          const SizedBox(width: 8),
-                          _isOk(model)
-                            ? const Icon(Icons.done_outline, color: Colors.green)
-                            : const Icon(Icons.do_not_disturb, color: Colors.red),
-                        ])
-                      ]))
-                    ])
-                  )
+        return Stack(
+          fit: StackFit.passthrough,
+          children: [
+            TrixContainer(
+              child: TrixExpandPanel(
+                headerWidget: const Padding(padding: EdgeInsets.only(top: 12), child: Text("And", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700))),
+                colour: const Color(0xFFFFFEFE),
+                child: SizedBox(
+                  height: 165,
+                  child: Row(children: [
+                    Expanded(child: TrixContainer(child: TextField(controller: actualCtrl, readOnly: true, maxLines: 1024))),
+                    const SizedBox(width: 8),
+                    Expanded(child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        Expanded(
+                          child: TrixDropdown(hintText: "Process", controller: processCtrl, options: const [stdout, stderr], getLabel: (s) => s, onChanged: (s) => model.setStdOutOrErr(i, j, s==stdout))
+                        ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: TrixDropdown(hintText: "As", controller: asCtrl, options: const [csvText, json, xml, regex], getLabel: (s) => s, onChanged: (s) => model.setAs(i, j, s))
+                        )
+                      ]),
+                      TrixText(child: TextField(controller: queryCtrl, decoration: const InputDecoration(labelText: "Query")), onChanged: (s) => model.setQuery(i, j, s)),
+                      const SizedBox(height: 6),
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        const Text("should be", style: TextStyle(fontWeight: FontWeight.w500)),
+                        const SizedBox(width: 8),
+                        SizedBox(
+                          width: 50,
+                          child: TrixDropdown(hintText: "Op", controller: opCtrl, options: const [eq, gt, lt, ge, le], getLabel: (s) => s, onChanged: (s) => model.setOperation(i, j, s))
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TrixText(child: TextField(controller: expectedCtrl), onChanged: (s) => model.setExpectedValue(i, j, s))
+                        ),
+                        const SizedBox(width: 8),
+                        _isOk(model)
+                          ? const Icon(Icons.done_outline, color: Colors.green)
+                          : const Icon(Icons.do_not_disturb, color: Colors.red),
+                      ])
+                    ]))
+                  ])
                 )
-              ),
-              Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: _delete))
-            ]
-          )
+              )
+            ),
+            Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: () => model.removeAnd(i, j)))
+          ]
         );
       }
     );
@@ -120,12 +116,6 @@ class _AndWidgetState extends State<AndWidget> {
       expectedCtrl.text = model.getExpectedValue(i, j);
       _modelTs = model.createdTs;
     }
-  }
-
-  void _delete() {
-    setState(() {
-      _isDeleted = true;
-    });
   }
 
   void _process(TestModel model) {

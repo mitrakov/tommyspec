@@ -121,6 +121,12 @@ class TestModel extends Model {
     notifyListeners();
   }
 
+  void removeAnd(int scenario, int and) {
+    _scenarios[scenario].ands.removeAt(and);
+    _createdTs = DateTime.now().millisecondsSinceEpoch; // hard reset model
+    notifyListeners();
+  }
+
   // json serialization
   @protected // used only for json generation
   List<ScenarioModel> get scenarios => _scenarios;
