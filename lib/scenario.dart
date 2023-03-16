@@ -27,44 +27,51 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   bool _showGiven = false;
   bool _showWhen = false;
   bool _showThen = false;
-  bool _isDeleted = false;
+  late Key unsubscribeKey;
 
   @override
   void initState() {
     super.initState();
     final model = ScopedModel.of<TestModel>(context);
     final i = widget.idx;
-    widget.runController.register(runProcess);
+    unsubscribeKey = widget.runController.register(runProcess); // register a function in parent, so that parent can call it
     _showGiven = model.getPwd(i) != null && model.getEnv(i) != null;
     _showWhen = model.getArgs(i).isNotEmpty;
     _showThen = model.getAndsCount(i) > 0;
   }
 
   @override
+  void dispose() {
+    widget.runController.deregister(unsubscribeKey); // unsubscribe the registered function, needed when a user removes the scenario
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final i = widget.idx;
-    return Visibility(
-      visible: !_isDeleted,
-      child: Stack(
-        fit: StackFit.passthrough,
-        children: [
-          Card(
-            elevation: 5,
-            child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              _showGiven
-                ? GivenWidget(i)
-                : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
-              _showWhen
-                ? WhenWidget(i)
-                : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
-              _showThen
-                ? ThenWidget(i, actualStatusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl)
-                : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
-            ])
-          ),
-          Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: _delete))
-        ]
-      )
+    return ScopedModelDescendant<TestModel>(
+      builder: (context, _, model) {
+        return Stack(
+          fit: StackFit.passthrough,
+          children: [
+            Card(
+              elevation: 5,
+              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                _showGiven
+                  ? GivenWidget(i)
+                  : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
+                _showWhen
+                  ? WhenWidget(i)
+                  : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
+                _showThen
+                  ? ThenWidget(i, actualStatusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl)
+                  : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
+              ])
+            ),
+            Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: () => model.removeScenario(i)))
+          ]
+        );
+      },
     );
   }
 
@@ -83,12 +90,6 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
   void _onThenPressed() {
     setState(() {
       _showThen = !_showThen;
-    });
-  }
-
-  void _delete() {
-    setState(() {
-      _isDeleted = true;
     });
   }
 

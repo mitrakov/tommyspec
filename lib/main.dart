@@ -10,9 +10,6 @@ import 'package:tommyspec/model/model.dart';
 import 'package:tommyspec/scenario.dart';
 import 'package:tommyspec/utils/fnctrl.dart';
 
-// bugs:
-// combobox
-// remove AND and then Load Model with CMD+O
 void main() {
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Scaffold(body: MyApp())));
 }
@@ -57,25 +54,28 @@ class _MyAppState extends State<MyApp> {
                 RunIntent: CallbackAction(onInvoke: (_) => _run()),
                 DebugIntent: CallbackAction(onInvoke: (_) => print(model.toJson())),
               },
-              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Row(children: [
-                  const SizedBox(width: 10),
-                  Expanded(child: TextField(controller: commandCtrl, decoration: const InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)),
-                  const Expanded(child: SizedBox()),
-                  ElevatedButton(onPressed: _run, child: const Text("Run", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700))),
-                  const SizedBox(width: 4),
+              child: Focus(
+                autofocus: true,
+                child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Row(children: [
+                    const SizedBox(width: 10),
+                    Expanded(child: TextField(controller: commandCtrl, decoration: const InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)),
+                    const Expanded(child: SizedBox()),
+                    ElevatedButton(onPressed: _run, child: const Text("Run", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700))),
+                    const SizedBox(width: 4),
+                  ]),
+                  Expanded(child: ListView.builder(
+                    itemCount: model.scenariosCount + 1,
+                    itemBuilder: (context, i) {
+                      return i == model.scenariosCount
+                        ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                            TrixIconTextButton(icon: const Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => model.addScenario())
+                          ])
+                        : ScenarioWidget(i, runCtrl);
+                    }
+                  ))
                 ]),
-                Expanded(child: ListView.builder(
-                  itemCount: model.scenariosCount + 1,
-                  itemBuilder: (context, i) {
-                    return i == model.scenariosCount
-                      ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          TrixIconTextButton(icon: const Icon(Icons.add_circle_outline), label: "Scenario", onTap: () => model.addScenario())
-                        ])
-                      : ScenarioWidget(i, runCtrl);
-                  }
-                ))
-              ])
+              )
             );
           })
         )

@@ -5,13 +5,15 @@ part 'model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class TestModel extends Model {
-  final int createdTs = DateTime.now().millisecondsSinceEpoch; // needed for ⌘+O functionality to establish current timestamp
+  int _createdTs = DateTime.now().millisecondsSinceEpoch; // needed to hard reset model and rebuild the whole widget tree
   String _command = "";
   List<ScenarioModel> _scenarios = [];
 
   TestModel();
 
   // getters
+  int get createdTs => _createdTs;
+
   String get command => _command;
 
   int get scenariosCount => _scenarios.length;
@@ -109,6 +111,13 @@ class TestModel extends Model {
 
   void addAndCondition(int scenario) {
     _scenarios[scenario].ands.add(AndModel());
+    notifyListeners();
+  }
+
+  // removers
+  void removeScenario(int scenario) {
+    _scenarios.removeAt(scenario);
+    _createdTs = DateTime.now().millisecondsSinceEpoch; // hard reset model
     notifyListeners();
   }
 
