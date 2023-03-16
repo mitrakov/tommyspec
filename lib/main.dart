@@ -61,7 +61,11 @@ class _MyAppState extends State<MyApp> {
                     const SizedBox(width: 10),
                     Expanded(child: TextField(controller: commandCtrl, decoration: const InputDecoration(hintText: "Command"), onChanged: (s) => model.command = s)),
                     const Expanded(child: SizedBox()),
-                    ElevatedButton(onPressed: _run, child: const Text("Run", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700))),
+                    ElevatedButton(
+                      onPressed: _run,
+                        style: const ButtonStyle(minimumSize: MaterialStatePropertyAll(Size(120, 47))),
+                        child: const Text("Run", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700))
+                    ),
                     const SizedBox(width: 4),
                   ]),
                   Expanded(child: ListView.builder(
