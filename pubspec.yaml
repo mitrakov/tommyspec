@@ -1,6 +1,6 @@
 # run with "--no-sound-null-safety"
 name: tommyspec
-description: TommySpec project
+description: Command Line Spec tool
 
 version: 1.0.0+1
 
@@ -13,10 +13,9 @@ dependencies:
   scoped_model: ^2.0.0      # state management
   split_view: ^3.2.1        # split view widget
   json_path: ^0.4.2         # js path
-  xpath_parse: ^1.0.2       # xpath (update to null-safety version)
+  xpath_parse: ^1.0.2       # xpath (TODO update to null-safety version)
   csv: ^5.0.1               # csv parser
   file_picker: ^5.2.5       # openFile and saveFile dialog
-  flutter_platform_alert: ^0.3.0 # native dialogs       TODO: maybe useless!
   json_annotation: ^4.8.0   # convert class to json
   menubar:                  # native menu bar for Windows/Linux; should be removed once Flutter PlatformMenuBar supports Windows/Linux
     git:

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.mitrakoff.self" "\0"
-            VALUE "FileDescription", "tommyspec" "\0"
+            VALUE "FileDescription", "Command Line Spec tool" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "tommyspec" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.mitrakoff.self. All rights reserved." "\0"
-            VALUE "OriginalFilename", "tommyspec.exe" "\0"
-            VALUE "ProductName", "tommyspec" "\0"
+            VALUE "InternalName", "Command Line Spec" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 mitrakov-artem@yandex.ru. All rights reserved." "\0"
+            VALUE "OriginalFilename", "CommandLineSpec.exe" "\0"
+            VALUE "ProductName", "Command Line Spec" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
