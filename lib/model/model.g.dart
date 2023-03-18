@@ -24,6 +24,7 @@ ScenarioModel _$ScenarioModelFromJson(Map<String, dynamic> json) =>
         (k, e) => MapEntry(k, e as String),
       )
       ..args = (json['args'] as List<dynamic>).map((e) => e as String).toList()
+      ..stdin = json['stdin'] as String
       ..expectedStatus = json['expectedStatus'] as String
       ..ands = (json['ands'] as List<dynamic>)
           .map((e) => AndModel.fromJson(e as Map<String, dynamic>))
@@ -34,6 +35,7 @@ Map<String, dynamic> _$ScenarioModelToJson(ScenarioModel instance) =>
       'pwd': instance.pwd,
       'env': instance.env,
       'args': instance.args,
+      'stdin': instance.stdin,
       'expectedStatus': instance.expectedStatus,
       'ands': instance.ands.map((e) => e.toJson()).toList(),
     };
