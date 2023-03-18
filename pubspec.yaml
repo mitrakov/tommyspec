@@ -18,6 +18,11 @@ dependencies:
   file_picker: ^5.2.5       # openFile and saveFile dialog
   flutter_platform_alert: ^0.3.0 # native dialogs       TODO: maybe useless!
   json_annotation: ^4.8.0   # convert class to json
+  menubar:                  # native menu bar for Windows/Linux; should be removed once Flutter PlatformMenuBar supports Windows/Linux
+    git:
+      url: https://github.com/google/flutter-desktop-embedding.git
+      path: plugins/menubar
+      ref: master
 
 dev_dependencies:
   flutter_lints: ^2.0.0

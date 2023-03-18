@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:menubar/menubar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:tommyspec/common/icontextbutton.dart';
 import 'package:tommyspec/model/model.dart';
@@ -25,10 +26,16 @@ class _MyAppState extends State<MyApp> {
   TestModel _model = TestModel();
 
   @override
+  void initState() {
+    super.initState();
+    if (!Platform.isMacOS) _createNativeMenu(); // tmp solution to create menu on Windows/Linux
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ScopedModel<TestModel>(
       model: _model,
-      child: PlatformMenuBar(
+      child: PlatformMenuBar( // MacOS only
         menus: [
           PlatformMenu(label: "Hey-Hey", menus: [
             PlatformMenuItem(label: "Quit", shortcut: const SingleActivator(LogicalKeyboardKey.keyW, meta: true), onSelected: () => exit(0))
@@ -113,6 +120,22 @@ class _MyAppState extends State<MyApp> {
         commandCtrl.text = model.command;
       });
     }
+  }
+
+  void _createNativeMenu() {
+    // This is a temp solution, until Flutter adds "PlatformMenuBar" support for Windows/Linux.
+    // After that "menubar" dependency may also be removed
+    setApplicationMenu([
+      NativeSubmenu(label: "File", children: [
+        NativeMenuItem(label: "Open", shortcut: LogicalKeySet(LogicalKeyboardKey.keyO, LogicalKeyboardKey.control), onSelected: _openFile),
+        NativeMenuItem(label: "Save", shortcut: LogicalKeySet(LogicalKeyboardKey.keyS, LogicalKeyboardKey.control), onSelected: _saveFile),
+        const NativeMenuDivider(),
+        NativeMenuItem(label: "Quit", shortcut: LogicalKeySet(LogicalKeyboardKey.keyW, LogicalKeyboardKey.control), onSelected: () => exit(0)),
+      ]),
+      NativeSubmenu(label: "Build", children: [
+        NativeMenuItem(label: "Run", shortcut: LogicalKeySet(LogicalKeyboardKey.keyB, LogicalKeyboardKey.control), onSelected: _run),
+      ]),
+    ]);
   }
 }
 
