@@ -58,10 +58,10 @@ class _AndWidgetState extends State<AndWidget> {
           children: [
             TrixContainer(
               child: TrixExpandPanel(
-                headerWidget: const Padding(padding: EdgeInsets.only(top: 12), child: Text("And", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700))),
+                headerWidget: const Padding(padding: EdgeInsets.only(top: 12, left: 2), child: Text("And", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700))),
                 colour: const Color(0xFFFFFEFE),
                 child: SizedBox(
-                  height: 165,
+                  height: 180,
                   child: Row(children: [
                     Expanded(child: TrixContainer(child: TextField(controller: actualCtrl, readOnly: true, maxLines: 1024))),
                     const SizedBox(width: 8),

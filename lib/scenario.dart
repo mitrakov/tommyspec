@@ -51,25 +51,31 @@ class _ScenarioWidgetState extends State<ScenarioWidget> {
     final i = widget.idx;
     return ScopedModelDescendant<TestModel>(
       builder: (context, _, model) {
-        return Stack(
-          fit: StackFit.passthrough,
-          children: [
-            Card(
-              elevation: 5,
-              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                _showGiven
-                  ? GivenWidget(i)
-                  : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
-                _showWhen
-                  ? WhenWidget(i)
-                  : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
-                _showThen
-                  ? ThenWidget(i, actualStatusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl)
-                  : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
-              ])
-            ),
-            Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: () => model.removeScenario(i)))
-          ]
+        return Padding(
+          padding: const EdgeInsets.all(8),
+          child: Stack(
+            fit: StackFit.passthrough,
+            children: [
+              Card(
+                elevation: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column( mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    _showGiven
+                      ? GivenWidget(i)
+                      : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Given", onTap: _onGivenPressed),
+                    _showWhen
+                      ? WhenWidget(i)
+                      : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "When", onTap: _onWhenPressed),
+                    _showThen
+                      ? ThenWidget(i, actualStatusCtrl: statusCtrl, stdoutCtrl: stdoutCtrl, stderrCtrl: stderrCtrl)
+                      : TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "Then", onTap: _onThenPressed),
+                  ])
+                )
+              ),
+              Align(alignment: Alignment.topRight, child: IconButton(icon: const Icon(Icons.close), onPressed: () => model.removeScenario(i)))
+            ]
+          )
         );
       },
     );

@@ -16,22 +16,25 @@ class _TrixExpandPanelState extends State<TrixExpandPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionPanelList(
-      expandedHeaderPadding: EdgeInsets.zero,
-      children: [
-        ExpansionPanel(
-          headerBuilder: (context, isOpen) => widget.headerWidget,
-          body: widget.child,
-          isExpanded: isExpanded,
-          canTapOnHeader: true,
-          backgroundColor: widget.colour ?? const Color(0xFFF0F0FE)
-        )
-      ],
-      expansionCallback: (i, isOpen) {
-        setState(() {
-          isExpanded = !isOpen;
-        });
-      },
+    return Padding(
+      padding: const EdgeInsets.all(3),
+      child: ExpansionPanelList(
+        expandedHeaderPadding: EdgeInsets.zero,
+        children: [
+          ExpansionPanel(
+            headerBuilder: (context, isOpen) => widget.headerWidget,
+            body: widget.child,
+            isExpanded: isExpanded,
+            canTapOnHeader: true,
+            backgroundColor: widget.colour ?? const Color(0xFFF0F0FE)
+          )
+        ],
+        expansionCallback: (i, isOpen) {
+          setState(() {
+            isExpanded = !isOpen;
+          });
+        }
+      )
     );
   }
 }

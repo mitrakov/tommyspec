@@ -31,44 +31,41 @@ class _ThenWidgetState extends State<ThenWidget> {
       builder: (context, _, model) {
         _updateTextFields(model);
         final andsCount = model.getAndsCount(i);
-        return SizedBox(
-          height: 430 + 50.0*andsCount,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TrixContainer(
-                child: Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  const Text("Then", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
-                  const Text("Status code:", style: TextStyle(fontWeight: FontWeight.w500)),
-                  SizedBox(width: 80, child: TextField(controller: widget.actualStatusCtrl, textAlign: TextAlign.center, readOnly: true)),
-                  const Text("should be:", style: TextStyle(fontWeight: FontWeight.w500)),
-                  SizedBox(width: 80, child: TextField(controller: expectedStatusCtrl, textAlign: TextAlign.center, onChanged: (s) => model.setExpectedStatus(i, s))),
-                  _isStatusOk(model)
-                    ? const Icon(Icons.done_outline, color: Colors.green, size: 40)
-                    : const Icon(Icons.do_not_disturb_alt_rounded, color: Colors.red, size: 40)
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TrixContainer(
+              child: Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                const Text("Then", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
+                const Text("Status code:", style: TextStyle(fontWeight: FontWeight.w500)),
+                SizedBox(width: 80, child: TextField(controller: widget.actualStatusCtrl, textAlign: TextAlign.center, readOnly: true)),
+                const Text("should be:", style: TextStyle(fontWeight: FontWeight.w500)),
+                SizedBox(width: 80, child: TextField(controller: expectedStatusCtrl, textAlign: TextAlign.center, onChanged: (s) => model.setExpectedStatus(i, s))),
+                _isStatusOk(model)
+                  ? const Icon(Icons.done_outline, color: Colors.green, size: 40)
+                  : const Icon(Icons.do_not_disturb_alt_rounded, color: Colors.red, size: 40)
+              ])
+            ),
+            TrixExpandPanel(
+              headerWidget: const Padding(padding: EdgeInsets.only(top: 14), child: Text("Output", textAlign: TextAlign.center)),
+              child: SizedBox(
+                height: 200,
+                child: SplitView(viewMode: SplitViewMode.Horizontal, gripSize: 5, children: [
+                  TextField(controller: widget.stdoutCtrl, maxLines: 4096, readOnly: true, decoration: const InputDecoration(labelText: "Std Out")),
+                  TextField(controller: widget.stderrCtrl, maxLines: 4096, readOnly: true, decoration: const InputDecoration(labelText: "Std Err"), style: TextStyle(color: Colors.red),)
                 ])
-              ),
-              TrixExpandPanel(
-                headerWidget: const Padding(padding: EdgeInsets.only(top: 12), child: Text("Output", textAlign: TextAlign.center)),
-                child: SizedBox(
-                  height: 200,
-                  child: SplitView(viewMode: SplitViewMode.Horizontal, gripSize: 5, children: [
-                    TextField(controller: widget.stdoutCtrl, maxLines: 4096, readOnly: true, decoration: const InputDecoration(labelText: "Std Out")),
-                    TextField(controller: widget.stderrCtrl, maxLines: 4096, readOnly: true, decoration: const InputDecoration(labelText: "Std Err"), style: TextStyle(color: Colors.red),)
-                  ])
-                )
-              ),
-              Expanded(child: ListView.builder(
-                itemCount: andsCount + 1,
-                itemBuilder: (context, j) {
-                  return j == andsCount
-                    ? TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "And", onTap: () => _addAndItem(model))
-                    : AndWidget(i, j, stdoutCtrl: widget.stdoutCtrl, stderrCtrl: widget.stderrCtrl);
-                }
-              ))
-            ]
-          )
+              )
+            ),
+            SizedBox(height: 64*(andsCount + 1), child: ListView.builder(
+              itemCount: andsCount + 1,
+              itemBuilder: (context, j) {
+                return j == andsCount
+                  ? TrixIconTextButton(icon: const Icon(Icons.add_circle_outline_outlined), label: "And", onTap: () => _addAndItem(model))
+                  : AndWidget(i, j, stdoutCtrl: widget.stdoutCtrl, stderrCtrl: widget.stderrCtrl);
+              }
+            ))
+          ]
         );
       }
     );
